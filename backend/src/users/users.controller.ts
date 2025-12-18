@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateUserDto } from "./users.dto";
 import { UsersService } from "./users.service";
 
+@ApiBearerAuth("access-token")
+@UseGuards(AuthGuard)
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

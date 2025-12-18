@@ -10,16 +10,26 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle("Sewa-Sansar")
-    .setDescription("The Sewa-Sansar API description")
+    .setTitle("Sewa-Sanjal")
+    .setDescription("The Sewa-Sanjal API description")
     .setVersion("1.0")
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "Authorization",
+        in: "header",
+      },
+      "access-token",
+    )
     .build();
 
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);
 
   SwaggerModule.setup("docs", app, documentFactory, {
-    customSiteTitle: "API Docs - SewaFlow",
+    customSiteTitle: "API Docs - Sewa Sanjal",
   });
 
   await app.listen(process.env.PORT ?? 3000);
