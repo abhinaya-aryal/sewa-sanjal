@@ -30,6 +30,10 @@ async function bootstrap() {
 
   SwaggerModule.setup("docs", app, documentFactory, {
     customSiteTitle: "API Docs - Sewa Sanjal",
+    swaggerOptions: {
+      persistAuthorization:
+        process.env.NODE_ENV === "development" ? true : false,
+    },
   });
 
   await app.listen(process.env.PORT ?? 3000);

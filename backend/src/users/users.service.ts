@@ -15,7 +15,8 @@ export class UsersService {
       data: {
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: data?.phone,
+        role: data?.role,
         avatarUrl: data.avatarUrl,
         passwordHash,
       },

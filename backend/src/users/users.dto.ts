@@ -2,11 +2,13 @@ import { PartialType } from "@nestjs/mapped-types";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   MinLength,
 } from "class-validator";
+import { Role } from "prisma/generated/enums";
 
 export class CreateUserDto {
   @ApiProperty({ example: "test@gmail.com" })
@@ -22,6 +24,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @ApiPropertyOptional({ enum: Role, enumName: "Role", example: Role.CUSTOMER })
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
 
   @ApiProperty({ example: "John Doe" })
   @IsNotEmpty()

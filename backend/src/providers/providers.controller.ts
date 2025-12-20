@@ -6,12 +6,22 @@ import {
   Patch,
   Param,
   Query,
+  UseGuards,
 } from "@nestjs/common";
-import { ApiOperation } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from "@nestjs/swagger";
+import { CurrentUser } from "src/common/decorators/current-user.decorator";
+import { AuthGuard } from "src/common/guards/auth.guard";
 
 import { CreateProviderDto, UpdateProviderDto } from "./providers.dto";
 import { ProvidersService } from "./providers.service";
 
+@ApiBearerAuth("access-token")
+@UseGuards(AuthGuard)
 @Controller("providers")
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
@@ -19,15 +29,10 @@ export class ProvidersController {
   @ApiOperation({ summary: "Create a provider service" })
   @Post()
   create(
-    // @CurrentUser() user: { id: string; role: string },
-    @Body() dto: CreateProviderDto,
+    @CurrentUser() user: { id: string; role: string },
+    @Body() data: CreateProviderDto,
   ) {
-    // return this.providersService.create(user.id, user.role, dto);
-    return this.providersService.create(
-      "cmihkx70b00000tpdp006tqig",
-      "CUSTOMER",
-      dto,
-    );
+    return this.providersService.create(user.id, user.role, data);
   }
 
   @Get(":id")
@@ -36,6 +41,9 @@ export class ProvidersController {
   }
 
   @Get()
+  @ApiQuery({ name: "category", required: false, description: "Category Id" })
+  @ApiQuery({ name: "city", required: false })
+  @ApiQuery({ name: "verified", required: false })
   findAll(
     @Query("category") category?: string,
     @Query("city") city?: string,
@@ -51,11 +59,10 @@ export class ProvidersController {
   @Patch(":id")
   update(
     @Param("id") id: string,
-    // @CurrentUser() user: { id: string },
+    @CurrentUser() user: { id: string },
     @Body() dto: UpdateProviderDto,
   ) {
-    // return this.providersService.update(id, user.id, dto);
-    return this.providersService.update(id, "cmihkx70b00000tpdp006tqig", dto);
+    return this.providersService.update(id, user.id, dto);
   }
 
   @Post(":id/verify")

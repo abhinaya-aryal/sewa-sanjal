@@ -35,7 +35,7 @@ model Provider {
   userId         String         @unique
   user           User           @relation(fields: [userId], references: [id])
   bio            String?
-  categories     Category[]     @relation("ProviderCategories")
+  categories     Category[]     @relation("providerCategories")
   services       Service[]
   availabilities Availability[]
   isVerified     Boolean        @default(false)
@@ -51,7 +51,7 @@ model Category {
   id        String     @id @default(cuid())
   name      String     @unique
   slug      String     @unique
-  providers Provider[] @relation("ProviderCategories")
+  providers Provider[] @relation("providerCategories")
   services  Service[]
 }
 

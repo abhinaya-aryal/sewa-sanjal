@@ -11,7 +11,7 @@ import { CreateProviderDto, UpdateProviderDto } from "./providers.dto";
 export class ProvidersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: string, role: string, dto: CreateProviderDto) {
+  async create(userId: string, role: string, data: CreateProviderDto) {
     if (role !== "PROVIDER")
       throw new ForbiddenException(
         "Only providers can create provider profile",
@@ -20,12 +20,16 @@ export class ProvidersService {
     return this.prisma.provider.create({
       data: {
         userId,
-        bio: dto.bio,
-        location: dto.location,
-        categories: {
-          connect: dto.categoryIds.map((id) => ({ id })),
-        },
+        bio: data.bio,
+        documentUrl: data.documentUrl,
+        location: data.location,
+        categories: data.categoryIds
+          ? {
+              connect: data?.categoryIds.map((id) => ({ id })),
+            }
+          : undefined,
       },
+      include: { categories: true },
     });
   }
 
