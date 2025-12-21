@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  // app.useGlobalFilters(new PrismaExceptionFilter());  // not working as expected
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle("Sewa-Sanjal")
@@ -40,5 +41,5 @@ async function bootstrap() {
 }
 
 bootstrap().catch(() => {
-  console.error("Error starting the application");
+  console.error("Error starting the application"); // eslint-disable-line
 });

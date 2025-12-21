@@ -1,17 +1,20 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Patch,
   Param,
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+} from "@nestjs/swagger";
+import { CurrentUser } from "src/common/decorators/current-user.decorator";
 import { AuthGuard } from "src/common/guards/auth.guard";
 
-import { CreateUserDto } from "./users.dto";
 import { UsersService } from "./users.service";
 
 @ApiBearerAuth("access-token")
@@ -20,14 +23,6 @@ import { UsersService } from "./users.service";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiOperation({
-    summary: "Create a new user",
-  })
-  @Post()
-  create(@Body() userData: CreateUserDto) {
-    return this.usersService.create(userData);
-  }
-
   @ApiOperation({ summary: "List of users" })
   @ApiOkResponse({ description: "List of users" })
   @Get()
@@ -35,14 +30,23 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @ApiOperation({ summary: "Info of logged in user" })
+  @Get("me")
+  getProfile(@CurrentUser() user: { id: string; role: string; name: string }) {
+    return user;
+  }
+
+  @ApiOperation({ summary: "Update own info" })
+  @Patch("me")
+  update(@CurrentUser() user: { id: string }) {
+    return this.usersService.update(user.id);
+  }
+
+  @ApiOperation({ summary: "Get user by ID" })
+  @ApiParam({ name: "id", example: "cmij1etlp000081nx22jk80w2" })
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.usersService.findOne(id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string) {
-    return this.usersService.update(id);
   }
 
   @Delete(":id")

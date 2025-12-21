@@ -26,7 +26,7 @@ import { ProvidersService } from "./providers.service";
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
-  @ApiOperation({ summary: "Create a provider service" })
+  @ApiOperation({ summary: "User requests to become a service provider" })
   @Post()
   create(
     @CurrentUser() user: { id: string; role: string },
@@ -35,6 +35,11 @@ export class ProvidersController {
     return this.providersService.create(user.id, user.role, data);
   }
 
+  @ApiOperation({ summary: "Get Provider by id" })
+  @ApiParam({
+    name: "id",
+    example: "cmje5zmtk00009pqewhgd5eob",
+  })
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.providersService.findOne(id);
@@ -65,6 +70,11 @@ export class ProvidersController {
     return this.providersService.update(id, user.id, dto);
   }
 
+  @ApiOperation({ summary: "Verify the provider by admin" })
+  @ApiParam({
+    name: "id",
+    example: "cmje5zmtk00009pqewhgd5eob",
+  })
   @Post(":id/verify")
   verify(@Param("id") id: string) {
     return this.providersService.verify(id);

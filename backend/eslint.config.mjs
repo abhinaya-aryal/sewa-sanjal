@@ -74,7 +74,7 @@ export default tseslint.config(
 
       "prettier/prettier": ["error", { singleQuote: false, endOfLine: "auto" }],
 
-      // "no-console": "off",
+      "no-console": "warn",
       "no-useless-constructor": "off",
     },
   },

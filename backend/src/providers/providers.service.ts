@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -17,12 +18,28 @@ export class ProvidersService {
         "Only providers can create provider profile",
       );
 
-    return this.prisma.provider.create({
+    const existing = await this.prisma.provider.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        "Provider profile already exists for this user",
+      );
+    }
+
+    return await this.prisma.provider.create({
       data: {
         userId,
         bio: data.bio,
         documentUrl: data.documentUrl,
-        location: data.location,
+        location: data.location
+          ? {
+              ...data.location,
+              city: data.location.city?.toLowerCase(),
+            }
+          : undefined,
         categories: data.categoryIds
           ? {
               connect: data?.categoryIds.map((id) => ({ id })),
@@ -45,7 +62,7 @@ export class ProvidersService {
           ? { some: { id: filters.category } }
           : undefined,
         location: filters.city
-          ? { path: "$.city", equals: filters.city }
+          ? { path: "$.city", equals: filters.city.toLowerCase() }
           : undefined,
       },
       include: {
@@ -58,7 +75,14 @@ export class ProvidersService {
     const provider = await this.prisma.provider.findUnique({
       where: { id },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
         categories: true,
         services: true,
       },

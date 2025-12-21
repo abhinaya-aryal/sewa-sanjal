@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 
 import { CreateCategoryDto } from "./categories.dto";
@@ -8,7 +12,35 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateCategoryDto) {
-    return await this.prisma.category.create({ data });
+    const existingName = await this.prisma.category.findUnique({
+      where: { name: data.name },
+      select: { id: true },
+    });
+    if (existingName) {
+      throw new ConflictException({
+        field: "name",
+        message: "Category with this name already exists",
+      });
+    }
+
+    const existingSlug = await this.prisma.category.findUnique({
+      where: { slug: data.slug },
+      select: { id: true },
+    });
+    if (existingSlug) {
+      throw new ConflictException({
+        field: "slug",
+        message: "Category with this slug already exists",
+      });
+    }
+
+    return await this.prisma.category.create({
+      data: {
+        ...data,
+        name: data.name.trim(),
+        slug: data.slug.trim().toLowerCase(),
+      },
+    });
   }
 
   async findAll() {
@@ -43,13 +75,21 @@ export class CategoriesService {
     });
   }
 
-  async providerByCategory(categorySlug: string) {
+  async providersByCategory(categorySlug: string) {
     const category = await this.prisma.category.findUnique({
       where: { slug: categorySlug },
       include: {
         providers: {
           include: {
-            user: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+                avatarUrl: true,
+              },
+            },
             categories: true,
           },
         },
