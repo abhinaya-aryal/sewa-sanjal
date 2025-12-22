@@ -11,12 +11,17 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiTags,
 } from "@nestjs/swagger";
+import { Role } from "prisma/generated/enums";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
+import { Roles } from "src/common/decorators/roles.decorator";
 import { AuthGuard } from "src/common/guards/auth.guard";
+import { RolesGuard } from "src/common/guards/roles.guard";
 
 import { UsersService } from "./users.service";
 
+@ApiTags("Users")
 @ApiBearerAuth("access-token")
 @UseGuards(AuthGuard)
 @Controller("users")
@@ -43,7 +48,9 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: "Get user by ID" })
-  @ApiParam({ name: "id", example: "cmij1etlp000081nx22jk80w2" })
+  @ApiParam({ name: "id", example: "cmjf730iv00005tqey30wdkmf" })
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.usersService.findOne(id);

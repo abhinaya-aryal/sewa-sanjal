@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { Role } from "prisma/generated/enums";
 import { PrismaService } from "src/prisma/prisma.service";
 
 import { CreateProviderDto, UpdateProviderDto } from "./providers.dto";
@@ -12,12 +13,7 @@ import { CreateProviderDto, UpdateProviderDto } from "./providers.dto";
 export class ProvidersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: string, role: string, data: CreateProviderDto) {
-    if (role !== "PROVIDER")
-      throw new ForbiddenException(
-        "Only providers can create provider profile",
-      );
-
+  async create(userId: string, data: CreateProviderDto) {
     const existing = await this.prisma.provider.findUnique({
       where: { userId },
       select: { id: true },
@@ -29,24 +25,36 @@ export class ProvidersService {
       );
     }
 
-    return await this.prisma.provider.create({
-      data: {
-        userId,
-        bio: data.bio,
-        documentUrl: data.documentUrl,
-        location: data.location
-          ? {
-              ...data.location,
-              city: data.location.city?.toLowerCase(),
-            }
-          : undefined,
-        categories: data.categoryIds
-          ? {
-              connect: data?.categoryIds.map((id) => ({ id })),
-            }
-          : undefined,
-      },
-      include: { categories: true },
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { role: Role.PROVIDER },
+    });
+
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: userId },
+        data: { role: Role.PROVIDER },
+      });
+
+      return await tx.provider.create({
+        data: {
+          userId,
+          bio: data.bio,
+          documentUrl: data.documentUrl,
+          location: data.location
+            ? {
+                ...data.location,
+                city: data.location.city?.toLowerCase(),
+              }
+            : undefined,
+          categories: data.categoryIds
+            ? {
+                connect: data?.categoryIds.map((id) => ({ id })),
+              }
+            : undefined,
+        },
+        include: { categories: true },
+      });
     });
   }
 

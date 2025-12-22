@@ -1,6 +1,9 @@
 import { Body, Controller, Get, Post, UseGuards, Param } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiParam } from "@nestjs/swagger";
+import { Role } from "prisma/generated/enums";
+import { Roles } from "src/common/decorators/roles.decorator";
 import { AuthGuard } from "src/common/guards/auth.guard";
+import { RolesGuard } from "src/common/guards/roles.guard";
 
 import { CreateCategoryDto } from "./categories.dto";
 import { CategoriesService } from "./categories.service";
@@ -11,7 +14,12 @@ import { CategoriesService } from "./categories.service";
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @ApiOperation({ summary: "Create a category" })
+  @ApiOperation({
+    summary: "Create a category",
+    description: "Category can be created by admin only.",
+  })
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @Post()
   create(@Body() data: CreateCategoryDto) {
     return this.categoriesService.create(data);

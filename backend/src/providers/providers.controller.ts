@@ -14,8 +14,11 @@ import {
   ApiParam,
   ApiQuery,
 } from "@nestjs/swagger";
+import { Role } from "prisma/generated/enums";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
+import { Roles } from "src/common/decorators/roles.decorator";
 import { AuthGuard } from "src/common/guards/auth.guard";
+import { RolesGuard } from "src/common/guards/roles.guard";
 
 import { CreateProviderDto, UpdateProviderDto } from "./providers.dto";
 import { ProvidersService } from "./providers.service";
@@ -28,17 +31,14 @@ export class ProvidersController {
 
   @ApiOperation({ summary: "User requests to become a service provider" })
   @Post()
-  create(
-    @CurrentUser() user: { id: string; role: string },
-    @Body() data: CreateProviderDto,
-  ) {
-    return this.providersService.create(user.id, user.role, data);
+  create(@CurrentUser() user: { id: string }, @Body() data: CreateProviderDto) {
+    return this.providersService.create(user.id, data);
   }
 
   @ApiOperation({ summary: "Get Provider by id" })
   @ApiParam({
     name: "id",
-    example: "cmje5zmtk00009pqewhgd5eob",
+    example: "cmjf76wxk00006dqe4or0st9v",
   })
   @Get(":id")
   findOne(@Param("id") id: string) {
@@ -75,6 +75,8 @@ export class ProvidersController {
     name: "id",
     example: "cmje5zmtk00009pqewhgd5eob",
   })
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @Post(":id/verify")
   verify(@Param("id") id: string) {
     return this.providersService.verify(id);
