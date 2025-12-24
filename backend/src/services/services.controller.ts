@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Patch,
   Query,
   UseGuards,
 } from "@nestjs/common";
@@ -21,7 +23,7 @@ import { AuthGuard } from "src/common/guards/auth.guard";
 import { RolesGuard } from "src/common/guards/roles.guard";
 import type { JwtUser } from "src/common/types";
 
-import { CreateServiceDto } from "./services.dto";
+import { CreateServiceDto, UpdateServiceDto } from "./services.dto";
 import { ServicesService } from "./services.service";
 
 @ApiTags("Services")
@@ -58,5 +60,31 @@ export class ServicesController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.servicesService.findOne(id);
+  }
+
+  @ApiOperation({
+    summary: "Update the specific service",
+    description: "Only owner can update his/her service",
+  })
+  @ApiParam({ name: "id", example: "cmjfdzlyf0002g9qenmpp03et" })
+  @UseGuards(RolesGuard)
+  @Roles(Role.PROVIDER)
+  @Patch(":id")
+  update(
+    @Param("id") id: string,
+    @CurrentUser() user: JwtUser,
+    @Body() data: UpdateServiceDto,
+  ) {
+    return this.servicesService.update(id, user.id, data);
+  }
+
+  @ApiOperation({
+    summary: "Delete a service",
+    description: "Only owner can delete his/her service",
+  })
+  @ApiParam({ name: "id", example: "cmjfdzlyf0002g9qenmpp03et" })
+  @Delete(":id")
+  remove(@CurrentUser() user: JwtUser, @Param("id") id: string) {
+    return this.servicesService.remove(id, user.id);
   }
 }

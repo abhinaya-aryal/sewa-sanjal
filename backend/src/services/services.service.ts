@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 
-import { CreateServiceDto } from "./services.dto";
+import { CreateServiceDto, UpdateServiceDto } from "./services.dto";
 
 @Injectable()
 export class ServicesService {
@@ -67,6 +67,24 @@ export class ServicesService {
     }
 
     return service;
+  }
+
+  async update(id: string, userId: string, data: UpdateServiceDto) {
+    const service = await this.prisma.service.findUnique({
+      where: { id },
+      include: { provider: true },
+    });
+
+    if (!service) throw new NotFoundException("Service not found");
+
+    if (service.provider.userId !== userId) {
+      throw new ForbiddenException("Not your service");
+    }
+
+    return this.prisma.service.update({
+      where: { id },
+      data: data,
+    });
   }
 
   async remove(id: string, userId: string) {

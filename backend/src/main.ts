@@ -24,6 +24,8 @@ async function bootstrap() {
       },
       "access-token",
     )
+    .addTag("App")
+    .addTag("Auth")
     .build();
 
   const documentFactory = () =>
