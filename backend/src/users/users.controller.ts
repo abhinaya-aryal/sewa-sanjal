@@ -18,6 +18,7 @@ import { CurrentUser } from "src/common/decorators/current-user.decorator";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { AuthGuard } from "src/common/guards/auth.guard";
 import { RolesGuard } from "src/common/guards/roles.guard";
+import type { JwtUser } from "src/common/types";
 
 import { UsersService } from "./users.service";
 
@@ -37,8 +38,8 @@ export class UsersController {
 
   @ApiOperation({ summary: "Info of logged in user" })
   @Get("me")
-  getProfile(@CurrentUser() user: { id: string; role: string; name: string }) {
-    return user;
+  getProfile(@CurrentUser() user: JwtUser) {
+    return this.usersService.findOne(user.id);
   }
 
   @ApiOperation({ summary: "Update own info" })

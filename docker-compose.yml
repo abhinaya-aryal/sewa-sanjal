@@ -1,11 +1,11 @@
-name: sewa-sansar
+name: sewa-sanjal
 services:
   backend:
-    container_name: sewa-sansar-dev
+    container_name: sewa-sanjal-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: sewa-sansar:dev
+    image: sewa-sanjal-backend:dev
     env_file:
       - ./backend/.env
     ports: ["4000:4000"]
@@ -27,6 +27,36 @@ services:
           path: ./backend/Dockerfile
         - action: rebuild
           path: ./backend/.env
+
+  frontend:
+    container_name: sews-sanjal-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: sewa-sanjal-frontend:dev
+    env_file:
+      - ./frontend/.env
+    ports: ["3000:3000"]
+    environment:
+      - NODE_ENV=development
+    networks:
+      - mariadb-net
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/Dockerfile
+        - action: rebuild
+          path: ./frontend/.env
+    depends_on:
+      - backend
 
 networks:
   mariadb-net:

@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Expose  port
-EXPOSE 4000
+EXPOSE 3000
 
 # Start in development mode with watch
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "dev"]

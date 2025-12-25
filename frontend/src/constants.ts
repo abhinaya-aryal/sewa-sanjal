@@ -1,0 +1,241 @@
+import {
+  Role,
+  BookingStatus,
+  Category,
+  Provider,
+  Service,
+  Booking,
+  User,
+} from "./types";
+
+export const CATEGORIES: Category[] = [
+  { id: "c1", name: "Plumbing", slug: "plumbing", icon: "Wrench" },
+  { id: "c2", name: "Electrical", slug: "electrical", icon: "Zap" },
+  { id: "c3", name: "Cleaning", slug: "cleaning", icon: "Sparkles" },
+  { id: "c4", name: "Beauty & Salon", slug: "beauty", icon: "Scissors" },
+  { id: "c5", name: "Painting", slug: "painting", icon: "Paintbrush" },
+  {
+    id: "c6",
+    name: "Appliance Repair",
+    slug: "appliance-repair",
+    icon: "Monitor",
+  },
+];
+
+export const MOCK_USERS: User[] = [
+  {
+    id: "u1",
+    name: "Aarav Sharma",
+    email: "aarav@example.com",
+    role: Role.CUSTOMER,
+    avatarUrl: "https://picsum.photos/100/100?random=1",
+  },
+  {
+    id: "u2",
+    name: "Sita Gurung",
+    email: "sita@provider.com",
+    role: Role.PROVIDER,
+    avatarUrl: "https://picsum.photos/100/100?random=2",
+  },
+  {
+    id: "u3",
+    name: "Ramesh Thapa",
+    email: "ramesh@provider.com",
+    role: Role.PROVIDER,
+    avatarUrl: "https://picsum.photos/100/100?random=3",
+  },
+  {
+    id: "u4",
+    name: "Sunita Chaudary",
+    email: "sunita@provider.com",
+    role: Role.PROVIDER,
+    avatarUrl: "https://picsum.photos/100/100?random=4",
+  },
+];
+
+export const MOCK_SERVICES: Service[] = [
+  {
+    id: "s1",
+    providerId: "p1",
+    title: "Tap Repair",
+    description: "Fixing leaking taps and pipes.",
+    price: 500,
+    currency: "NPR",
+    durationMin: 60,
+    categoryId: "c1",
+  },
+  {
+    id: "s2",
+    providerId: "p1",
+    title: "Full Bathroom Fitting",
+    description: "Installation of new bathroom sanitary ware.",
+    price: 5000,
+    currency: "NPR",
+    durationMin: 240,
+    categoryId: "c1",
+  },
+  {
+    id: "s3",
+    providerId: "p2",
+    title: "House Wiring",
+    description: "Complete electrical wiring for one room.",
+    price: 2000,
+    currency: "NPR",
+    durationMin: 180,
+    categoryId: "c2",
+  },
+  {
+    id: "s4",
+    providerId: "p3",
+    title: "Deep Home Cleaning",
+    description: "Intensive cleaning for 2BHK flat.",
+    price: 3500,
+    currency: "NPR",
+    durationMin: 300,
+    categoryId: "c3",
+  },
+  {
+    id: "s5",
+    providerId: "p3",
+    title: "Sofa Cleaning",
+    description: "Shampoo and vacuum cleaning for 5-seater sofa.",
+    price: 1500,
+    currency: "NPR",
+    durationMin: 90,
+    categoryId: "c3",
+  },
+];
+
+export const MOCK_PROVIDERS: Provider[] = [
+  {
+    id: "p1",
+    userId: "u2",
+    user: MOCK_USERS[1],
+    bio: "Expert plumber with 10 years of experience in Kathmandu valley. Reliable and quick service.",
+    categories: [CATEGORIES[0]],
+    services: [MOCK_SERVICES[0], MOCK_SERVICES[1]],
+    isVerified: true,
+    location: {
+      city: "Kathmandu",
+      district: "Kathmandu",
+      address: "Baneshwor",
+    },
+    rating: 4.8,
+    reviewCount: 45,
+    earnings: 125000,
+  },
+  {
+    id: "p2",
+    userId: "u3",
+    user: MOCK_USERS[2],
+    bio: "Certified electrician available for emergency repairs and new installations.",
+    categories: [CATEGORIES[1]],
+    services: [MOCK_SERVICES[2]],
+    isVerified: true,
+    location: { city: "Lalitpur", district: "Lalitpur", address: "Pulchowk" },
+    rating: 4.5,
+    reviewCount: 28,
+    earnings: 85000,
+  },
+  {
+    id: "p3",
+    userId: "u4",
+    user: MOCK_USERS[3],
+    bio: "Professional cleaning team using eco-friendly products.",
+    categories: [CATEGORIES[2]],
+    services: [MOCK_SERVICES[3], MOCK_SERVICES[4]],
+    isVerified: false,
+    location: {
+      city: "Bhaktapur",
+      district: "Bhaktapur",
+      address: "Suryabinayak",
+    },
+    rating: 4.2,
+    reviewCount: 12,
+    earnings: 32000,
+  },
+];
+
+export const MOCK_BOOKINGS: Booking[] = [
+  {
+    id: "b1",
+    customerId: "u1",
+    providerId: "p1",
+    serviceId: "s1",
+    scheduledAt: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+    durationMin: 60,
+    price: 500,
+    currency: "NPR",
+    status: BookingStatus.COMPLETED,
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    service: MOCK_SERVICES[0],
+    provider: MOCK_PROVIDERS[0],
+    customer: MOCK_USERS[0],
+  },
+  {
+    id: "b2",
+    customerId: "u1",
+    providerId: "p3",
+    serviceId: "s4",
+    scheduledAt: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+    durationMin: 300,
+    price: 3500,
+    currency: "NPR",
+    status: BookingStatus.ACCEPTED,
+    createdAt: new Date(Date.now() - 43200000).toISOString(),
+    service: MOCK_SERVICES[3],
+    provider: MOCK_PROVIDERS[2],
+    customer: MOCK_USERS[0],
+  },
+  {
+    id: "b3",
+    customerId: "u1",
+    providerId: "p2",
+    serviceId: "s3",
+    scheduledAt: new Date(Date.now() + 172800000).toISOString(), // Day after tomorrow
+    durationMin: 180,
+    price: 2000,
+    currency: "NPR",
+    status: BookingStatus.PENDING,
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    service: MOCK_SERVICES[2],
+    provider: MOCK_PROVIDERS[1],
+    customer: MOCK_USERS[0],
+  },
+];
+
+export const MOCK_REVIEWS = [
+  {
+    id: "r1",
+    bookingId: "b1",
+    authorId: "u1",
+    authorName: "Aarav Sharma",
+    rating: 5,
+    comment: "Excellent service! Arrived on time and fixed the leak quickly.",
+    createdAt: new Date(Date.now() - 100000000).toISOString(),
+  },
+  {
+    id: "r2",
+    bookingId: "b99",
+    authorId: "u5",
+    authorName: "Hari Krishna",
+    rating: 4,
+    comment: "Good work but arrived slightly late.",
+    createdAt: new Date(Date.now() - 200000000).toISOString(),
+  },
+  {
+    id: "r3",
+    bookingId: "b98",
+    authorId: "u6",
+    authorName: "Maya Devi",
+    rating: 5,
+    comment: "Very professional and clean work.",
+    createdAt: new Date(Date.now() - 300000000).toISOString(),
+  },
+];
+
+export const PAYMENT_METHODS = [
+  { id: "esewa", name: "eSewa", icon: "Wallet" },
+  { id: "khalti", name: "Khalti", icon: "Wallet" },
+  { id: "cash", name: "Cash on Delivery", icon: "Banknote" },
+];
