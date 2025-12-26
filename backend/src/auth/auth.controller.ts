@@ -1,5 +1,13 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Res,
+} from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import type { Response } from "express";
 
 import { LoginDto, RegisterUserDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
@@ -15,10 +23,40 @@ export class AuthController {
     return this.authService.register(data);
   }
 
-  @ApiOperation({ summary: "Login to the app" })
+  @ApiOperation({ summary: "Login to the app through web app" })
   @HttpCode(HttpStatus.OK)
-  @Post("login")
-  login(@Body() loginData: LoginDto) {
-    return this.authService.logIn(loginData.email, loginData.password);
+  @Post("login/web")
+  async webLogin(
+    @Body() loginData: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { webToken } = await this.authService.logIn(
+      loginData.email,
+      loginData.password,
+    );
+
+    res.cookie("accessToken", webToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return { message: "Web login successful" };
+  }
+
+  @ApiOperation({ summary: "Login to the app through mobile apps" })
+  @HttpCode(HttpStatus.OK)
+  @Post("login/mobile")
+  async mobileLogin(@Body() data: LoginDto) {
+    const { mobileToken } = await this.authService.logIn(
+      data.email,
+      data.password,
+    );
+
+    return {
+      accessToken: mobileToken,
+      tokenType: "Bearer",
+    };
   }
 }

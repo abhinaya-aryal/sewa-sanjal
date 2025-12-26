@@ -41,7 +41,7 @@ export class ServicesController {
   @Roles(Role.PROVIDER)
   @Post()
   create(@CurrentUser() user: JwtUser, @Body() data: CreateServiceDto) {
-    return this.servicesService.create(user.id, data);
+    return this.servicesService.create(user.sub, data);
   }
 
   @ApiOperation({ summary: "List all the services" })
@@ -75,7 +75,7 @@ export class ServicesController {
     @CurrentUser() user: JwtUser,
     @Body() data: UpdateServiceDto,
   ) {
-    return this.servicesService.update(id, user.id, data);
+    return this.servicesService.update(id, user.sub, data);
   }
 
   @ApiOperation({
@@ -85,6 +85,6 @@ export class ServicesController {
   @ApiParam({ name: "id", example: "cmjfdzlyf0002g9qenmpp03et" })
   @Delete(":id")
   remove(@CurrentUser() user: JwtUser, @Param("id") id: string) {
-    return this.servicesService.remove(id, user.id);
+    return this.servicesService.remove(id, user.sub);
   }
 }

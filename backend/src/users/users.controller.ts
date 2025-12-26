@@ -39,7 +39,7 @@ export class UsersController {
   @ApiOperation({ summary: "Info of logged in user" })
   @Get("me")
   getProfile(@CurrentUser() user: JwtUser) {
-    return this.usersService.findOne(user.id);
+    return this.usersService.findOne(user.sub);
   }
 
   @ApiOperation({ summary: "Update own info" })

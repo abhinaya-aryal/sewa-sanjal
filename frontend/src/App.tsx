@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -14,8 +14,16 @@ import Dashboard from "./components/screens/Dashboard";
 import Login from "./components/screens/Login";
 import Register from "./components/screens/Register";
 import { User } from "./types";
+import { useAuthStore } from "./store/authStore";
+import ProtectedRoute from "./hoc/ProtectedRoute";
 
 const App: React.FC = () => {
+  const fetchMe = useAuthStore((s) => s.fetchMe);
+
+  useEffect(() => {
+    fetchMe();
+  }, []);
+
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const handleLoginSuccess = (user: User) => {
@@ -64,11 +72,9 @@ const App: React.FC = () => {
             <Route
               path="/dashboard"
               element={
-                currentUser ? (
-                  <Dashboard user={currentUser} />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
               }
             />
           </Routes>
@@ -81,4 +87,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

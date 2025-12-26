@@ -63,10 +63,7 @@ export class AuthService {
     });
   }
 
-  async logIn(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
+  async logIn(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -80,10 +77,22 @@ export class AuthService {
       throw new UnauthorizedException("Invalid Credentials");
     }
 
-    const payload = { id: user.id, name: user.name, role: user.role };
+    const webToken = await this.jwt.signAsync(
+      {
+        sub: user.id,
+        client: "web",
+      },
+      { expiresIn: "15m" },
+    );
+
+    const mobileToken = await this.jwt.signAsync(
+      { sub: user.id, client: "mobile" },
+      { expiresIn: "30d" },
+    );
 
     return {
-      access_token: await this.jwt.signAsync(payload),
+      webToken,
+      mobileToken,
     };
   }
 }

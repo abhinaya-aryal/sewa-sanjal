@@ -1,6 +1,7 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import cookieParser from "cookie-parser";
 
 import { AppModule } from "./app.module";
 
@@ -13,6 +14,7 @@ async function bootstrap() {
     },
   });
 
+  app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   // app.useGlobalFilters(new PrismaExceptionFilter());  // not working as expected
 

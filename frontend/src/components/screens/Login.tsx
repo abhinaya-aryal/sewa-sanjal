@@ -37,7 +37,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
     try {
       // Mock login logic
-      await api.post("/auth/login", data);
+      await api.post("/auth/login/web", data);
       const response = await api.get("/users/me");
       console.log(response.data);
       onLoginSuccess(response.data);

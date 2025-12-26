@@ -2,13 +2,15 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { User } from "../types";
+import { useAuthStore } from "../store/authStore";
 
 interface NavbarProps {
   currentUser: User | null;
   onLogout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
+  const currentUser = useAuthStore((state) => state.user);
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
 
@@ -198,4 +200,3 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
 };
 
 export default Navbar;
-
