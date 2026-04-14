@@ -1,24 +1,31 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider     = "prisma-client"
-  output       = "../prisma/generated"
-  moduleFormat = "cjs"
+  provider = "prisma-client"
+  output   = "./generated"
+  runtime  = "bun"
 }
 
 datasource db {
   provider = "mysql"
 }
 
+generator prismabox {
+  provider                    = "prismabox"
+  typeboxImportDependencyName = "elysia"
+  typeboxImportVariableName   = "t"
+  inputModel                  = true
+  output                      = "./prismabox"
+}
+
 model User {
   id            String         @id @default(cuid())
   email         String         @unique
   phone         String?        @unique
-  passwordHash  String
+  password      String
   role          Role           @default(CUSTOMER)
   name          String
   avatarUrl     String?
