@@ -11,9 +11,9 @@ export const user = new Elysia({ prefix: "/users" })
   .patch("/me", ({ user }) => {
     return `This action updates a #${user.userId} user`;
   })
-  .get(":id", ({ params: { id } }) => {
+  .get("/:id", ({ params: { id } }) => {
     return getUser(id);
   })
-  .delete(":id", ({ params: { id } }) => {
+  .delete("/:id", ({ params: { id } }) => {
     return deleteUser(id);
   });
