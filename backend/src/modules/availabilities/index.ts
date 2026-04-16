@@ -12,6 +12,7 @@ import { removeCategoryFromProvider } from "../categories/service";
 
 export const availabilities = new Elysia({
   prefix: "/providers/:id/availabilities",
+  tags: ["Availabilities"],
 })
   .post(
     "/",

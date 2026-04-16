@@ -4,6 +4,7 @@ import { login, registerUser } from "./service";
 
 export const auth = new Elysia({
   prefix: "/auth",
+  tags: ["Auth"],
 })
   .post("/register", async ({ body }) => await registerUser(body), {
     body: UserPlainInputCreate,

@@ -11,7 +11,10 @@ import {
   ProviderPlainInputUpdate,
 } from "../../../prisma/prismabox/Provider";
 
-export const providers = new Elysia({ prefix: "/providers" })
+export const providers = new Elysia({
+  prefix: "/providers",
+  tags: ["Providers"],
+})
   .post(
     "/",
     ({ user, body }) => {

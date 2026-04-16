@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 import { deleteUser, getAllUser, getUser } from "./service";
 
-export const user = new Elysia({ prefix: "/users" })
+export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
   .get("/", () => {
     return getAllUser();
   })

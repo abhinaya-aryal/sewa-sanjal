@@ -8,7 +8,10 @@ import {
   removeCategoryFromProvider,
 } from "./service";
 
-export const categories = new Elysia({ prefix: "categories" })
+export const categories = new Elysia({
+  prefix: "categories",
+  tags: ["Categories"],
+})
 
   .post(
     "/",

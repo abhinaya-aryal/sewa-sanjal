@@ -1,26 +1,23 @@
-export const authGuard = {
-  resolve: async ({ cookie, headers, jwt, set }: any) => {
-    const tokenFromCookie = cookie.auth?.value;
+import Elysia, { InvalidCookieSignature } from "elysia";
 
-    const tokenFromHeader = headers.authorization?.replace(/^Bearer\s+/i, "");
+export const authGuard = new Elysia().derive(
+  { as: "scoped" },
+  async ({ cookie, headers, set, jwt }) => {
+    const tokenFromCookie = cookie.auth?.value;
+    const tokenFromHeader = headers.authorization?.slice(7);
 
     const token = tokenFromCookie ?? tokenFromHeader;
-
     if (!token) {
       set.status = 401;
-      throw new Error("Unauthorized: No token provided");
+      throw new InvalidCookieSignature("auth", "Invalid cookie or token");
     }
 
-    const payload = await jwt.verify(token).catch((err: any) => {
-      console.log(err);
-      return null;
-    });
-
+    const payload = await jwt.verify(token);
     if (!payload) {
       set.status = 401;
-      throw new Error("Unauthorized: Invalid token");
+      throw new InvalidCookieSignature("auth", "Invalid cookie or token");
     }
 
     return { user: payload };
   },
-};
+);

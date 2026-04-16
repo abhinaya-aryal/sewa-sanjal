@@ -11,7 +11,7 @@ import {
   ServicePlainInputUpdate,
 } from "../../../prisma/prismabox/Service";
 
-export const services = new Elysia({ prefix: "services" })
+export const services = new Elysia({ prefix: "services", tags: ["Services"] })
   .post(
     "/",
     ({ user, body }) => {
