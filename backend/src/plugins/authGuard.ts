@@ -1,4 +1,5 @@
 import Elysia, { InvalidCookieSignature } from "elysia";
+import { Role } from "../../prisma/generated/enums";
 
 export const authGuard = new Elysia().derive(
   { as: "scoped" },
@@ -18,6 +19,6 @@ export const authGuard = new Elysia().derive(
       throw new InvalidCookieSignature("auth", "Invalid cookie or token");
     }
 
-    return { user: payload };
+    return { user: payload as { userId: string; role: Role } };
   },
 );
