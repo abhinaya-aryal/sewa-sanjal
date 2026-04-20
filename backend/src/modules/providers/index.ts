@@ -10,11 +10,15 @@ import {
   ProviderPlainInputCreate,
   ProviderPlainInputUpdate,
 } from "../../../prisma/prismabox/Provider";
+import { guardMacro } from "../../plugins/guardMacro";
+import { Role } from "../../../prisma/generated/enums";
 
 export const providers = new Elysia({
   prefix: "/providers",
   tags: ["Providers"],
 })
+  .use(guardMacro)
+
   .post(
     "/",
     ({ user, body }) => {
@@ -22,8 +26,10 @@ export const providers = new Elysia({
     },
     {
       body: ProviderPlainInputCreate,
+      authGuard: true,
     },
   )
+
   .get(
     ":id",
     ({ params: { id } }) => {
@@ -31,6 +37,7 @@ export const providers = new Elysia({
     },
     { params: t.Object({ id: t.String() }) },
   )
+
   .get(
     "/",
     ({ query: { category, city, verified } }) => {
@@ -42,8 +49,10 @@ export const providers = new Elysia({
         city: t.Optional(t.String()),
         verified: t.Optional(t.Boolean()),
       }),
+      authGuard: true,
     },
   )
+
   .patch(
     ":id",
     ({ params: { id }, user, body }) => {
@@ -52,8 +61,14 @@ export const providers = new Elysia({
     {
       params: t.Object({ id: t.String() }),
       body: ProviderPlainInputUpdate,
+      authGuard: true,
     },
   )
-  .post(":id/verify", ({ params: { id } }) => {
-    return verifyProvider(id);
-  });
+
+  .post(
+    ":id/verify",
+    ({ params: { id } }) => {
+      return verifyProvider(id);
+    },
+    { rolesGuard: [Role.ADMIN] },
+  );

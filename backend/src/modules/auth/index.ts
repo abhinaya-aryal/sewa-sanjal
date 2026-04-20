@@ -1,14 +1,18 @@
-import { Elysia, t } from "elysia";
+import { Elysia, status, t } from "elysia";
 import { UserPlainInputCreate } from "../../../prisma/prismabox/User";
 import { login, registerUser } from "./service";
+import { jwtPlugin } from "../../plugins/jwt";
 
 export const auth = new Elysia({
   prefix: "/auth",
   tags: ["Auth"],
 })
+  .use(jwtPlugin)
+
   .post("/register", async ({ body }) => await registerUser(body), {
     body: UserPlainInputCreate,
   })
+
   .post(
     "/login/web",
     async ({ body, jwt, cookie }) => {
@@ -30,6 +34,7 @@ export const auth = new Elysia({
       }),
     },
   )
+
   .post(
     "/login/mobile",
     async ({ jwt, body }) => {
@@ -46,7 +51,16 @@ export const auth = new Elysia({
       }),
     },
   )
+
   .post("/logout", ({ cookie }) => {
     cookie.auth.set({ value: "", maxAge: 0 });
-    return { ok: true };
+    return status(200, "Logged out successfully");
+  })
+
+  .post("/refresh", async ({ cookie, set }) => {
+    const refreshTokenValue = cookie?.refreshToken?.value;
+
+    if (!refreshTokenValue) {
+      return status("Unauthorized", "Refresh token is not provided");
+    }
   });

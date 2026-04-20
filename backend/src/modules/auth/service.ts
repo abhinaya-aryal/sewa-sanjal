@@ -2,6 +2,7 @@ import { prisma } from "../../../prisma";
 import * as bcrypt from "bcrypt";
 import { UserPlainInputCreate } from "../../../prisma/prismabox/User";
 import { Static } from "elysia";
+import { JWTOption, JWTPayloadInput, JWTPayloadSpec } from "@elysiajs/jwt";
 
 export async function registerUser(body: Static<typeof UserPlainInputCreate>) {
   const existingEmail = await prisma.user.findUnique({
