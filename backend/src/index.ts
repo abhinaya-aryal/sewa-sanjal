@@ -7,8 +7,10 @@ import { providers } from "./modules/providers";
 import { categories } from "./modules/categories";
 import { availabilities } from "./modules/availabilities";
 import { openApi } from "./plugins/openApi";
+import cors from "@elysiajs/cors";
 
 const app = new Elysia()
+  .use(cors())
   .use(openApi)
   .use(errorHandler)
   .use(auth)

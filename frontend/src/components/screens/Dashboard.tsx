@@ -23,16 +23,18 @@ import {
   Cell,
 } from "recharts";
 import { useAuthStore } from "@/src/store/authStore";
+import { useUser } from "@/src/pages/login/_hook";
 
 interface DashboardProps {
   user: User;
 }
 
 const Dashboard: React.FC<DashboardProps> = () => {
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [providerServices, setProviderServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: user, isLoading } = useUser();
+  // const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
     "UPCOMING" | "HISTORY" | "SERVICES"
   >("UPCOMING");

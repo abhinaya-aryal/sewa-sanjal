@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, AlertCircle } from "lucide-react";
-import { User } from "../../types";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import api from "@/src/services/api";
+import { useLogin } from "./_hook";
 
 const LoginSchema = z.object({
   email: z.email("Invalid email address").min(1, "Email is required"),
   password: z.string().min(8, "Password must be at least 8 characters."),
 });
 
-interface LoginProps {
-  onLoginSuccess: (user: User) => void;
-}
-
-const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutateAsync, isPending } = useLogin();
 
   const {
     register,
@@ -31,25 +26,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     reValidateMode: "onChange",
   });
 
-  const onSubmit = async (data) => {
-    setError("");
-    setIsLoading(true);
-
-    try {
-      // Mock login logic
-      await api.post("/auth/login/web", data);
-      const response = await api.get("/users/me");
-      console.log(response.data);
-      onLoginSuccess(response.data);
-
-      navigate("/dashboard");
-    } catch (err: any) {
-      setError(
-        err.message || "Failed to login. Please check your credentials.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = async (payload) => {
+    await mutateAsync(payload);
+    navigate("/dashboard");
   };
 
   return (
@@ -78,7 +57,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md flex items-start text-sm">
-              <AlertCircle size={16} className="mt-0.5 mr-2 flex-shrink-0" />
+              <AlertCircle size={16} className="mt-0.5 mr-2 shrink-0" />
               {error}
             </div>
           )}
@@ -161,10 +140,10 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             <div>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isSubmitting}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isPending ? "Signing in..." : "Sign in"}
               </button>
             </div>
 

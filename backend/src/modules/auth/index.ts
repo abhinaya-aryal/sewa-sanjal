@@ -54,7 +54,7 @@ export const auth = new Elysia({
 
   .post("/logout", ({ cookie }) => {
     cookie.auth.set({ value: "", maxAge: 0 });
-    return status(200, "Logged out successfully");
+    return status(200, { message: "Logged out successfully" });
   })
 
   .post("/refresh", async ({ cookie, set }) => {

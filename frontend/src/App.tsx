@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,60 +11,39 @@ import Home from "./components/screens/Home";
 import Explore from "./components/screens/Explore";
 import ProviderDetails from "./components/screens/ProviderDetails";
 import Dashboard from "./components/screens/Dashboard";
-import Login from "./components/screens/Login";
 import Register from "./components/screens/Register";
-import { User } from "./types";
-import { useAuthStore } from "./store/authStore";
 import ProtectedRoute from "./hoc/ProtectedRoute";
+import Login from "./pages/login";
+import { useUser } from "./pages/login/_hook";
 
 const App: React.FC = () => {
-  const fetchMe = useAuthStore((s) => s.fetchMe);
-
-  useEffect(() => {
-    fetchMe();
-  }, []);
-
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const handleLoginSuccess = (user: User) => {
-    setCurrentUser(user);
-  };
-
-  const handleLogout = () => {
-    setCurrentUser(null);
-  };
+  const { data: user } = useUser();
 
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <Navbar currentUser={currentUser} onLogout={handleLogout} />
+        <Navbar />
 
-        <main className="flex-grow">
+        <main className="grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
             <Route
               path="/provider/:id"
-              element={<ProviderDetails currentUser={currentUser} />}
+              element={<ProviderDetails currentUser={user} />}
             />
 
             <Route
               path="/login"
-              element={
-                currentUser ? (
-                  <Navigate to="/dashboard" replace />
-                ) : (
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                )
-              }
+              element={user ? <Navigate to="/dashboard" replace /> : <Login />}
             />
             <Route
               path="/register"
               element={
-                currentUser ? (
+                user ? (
                   <Navigate to="/dashboard" replace />
                 ) : (
-                  <Register onLoginSuccess={handleLoginSuccess} />
+                  <Register onLoginSuccess={() => {}} />
                 )
               }
             />

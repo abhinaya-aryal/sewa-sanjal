@@ -1,12 +1,13 @@
 # Base Image
-FROM node:24-alpine
+FROM oven/bun:alpine
 
 # Working directory inside container
 WORKDIR /app
 
 # Install dependencies first
-COPY package*.json ./
-RUN npm install
+COPY package.json ./
+COPY bun.lock ./
+RUN bun install
 
 # Copy full project
 COPY . .
@@ -15,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Start in development mode with watch
-CMD ["npm", "run", "dev"]
+CMD ["bun", "dev"]

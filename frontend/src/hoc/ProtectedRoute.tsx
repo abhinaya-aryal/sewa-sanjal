@@ -1,15 +1,15 @@
 import React, { ReactNode } from "react";
-import { useAuthStore } from "../store/authStore";
 import { Navigate } from "react-router-dom";
+import { useUser } from "../pages/login/_hook";
 
 type Props = {
   children: ReactNode;
 };
 
 const ProtectedRoute: React.FC = ({ children }: Props) => {
-  const { user, loading } = useAuthStore();
+  const { data: user, isLoading } = useUser();
 
-  if (loading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return user ? children : <Navigate to="/login" replace />;
 };

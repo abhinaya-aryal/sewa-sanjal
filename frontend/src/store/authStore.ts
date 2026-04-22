@@ -1,6 +1,5 @@
-import axios from "axios";
 import { create } from "zustand";
-import api from "../services/api";
+import api, { apiClient } from "../services/api";
 import { Role } from "../types";
 
 type User = {
@@ -36,7 +35,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    await axios.post("/auth/logout");
+    await api.post("/auth/logout");
     set({ user: null });
   },
 }));

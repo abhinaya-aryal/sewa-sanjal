@@ -1,18 +1,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
-import { User } from "../types";
-import { useAuthStore } from "../store/authStore";
+import { useLogout, useUser } from "../pages/login/_hook";
 
-interface NavbarProps {
-  currentUser: User | null;
-  onLogout: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
-  const currentUser = useAuthStore((state) => state.user);
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
+
+  const { data: currentUser } = useUser();
+  const { mutate } = useLogout();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -28,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
+            <Link to="/" className="shrink-0 flex items-center">
               <span className="text-2xl font-bold text-primary-600">
                 Sewa<span className="text-secondary-900">Sanjal</span>
               </span>
@@ -72,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
                   </div>
                 </div>
                 <button
-                  onClick={onLogout}
+                  onClick={() => mutate()}
                   className="p-2 text-gray-500 hover:text-red-600 transition-colors"
                   title="Logout"
                 >
@@ -141,7 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
               {currentUser ? (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {currentUser.avatarUrl ? (
                         <img
                           className="h-10 w-10 rounded-full"
@@ -165,7 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
                   </div>
                   <button
                     onClick={() => {
-                      onLogout();
+                      mutate();
                       setIsOpen(false);
                     }}
                     className="text-red-600 font-medium"
