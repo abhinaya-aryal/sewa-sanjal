@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,14 +7,14 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Home from "./components/screens/Home";
 import Explore from "./components/screens/Explore";
 import ProviderDetails from "./components/screens/ProviderDetails";
 import Dashboard from "./components/screens/Dashboard";
-import Register from "./components/screens/Register";
 import ProtectedRoute from "./hoc/ProtectedRoute";
 import Login from "./pages/login";
 import { useUser } from "./pages/login/_hook";
+import Home from "./pages/home";
+import Register from "./pages/register";
 
 const App: React.FC = () => {
   const { data: user } = useUser();

@@ -12,10 +12,12 @@ import {
   Smile,
 } from "lucide-react";
 import { CATEGORIES, MOCK_PROVIDERS } from "../../constants";
-import ProviderCard from "../ProviderCard";
+import ProviderCard from "@/src/components/ProviderCard";
+import { usePopularCategories } from "./_hook";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { data: popularCategories } = usePopularCategories();
   const [searchQuery, setSearchQuery] = useState("");
   const featuredProviders = MOCK_PROVIDERS.slice(0, 3);
 
@@ -28,7 +30,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-white">
-      {/* Modern Hero Section */}
       <div className="relative bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -283,7 +284,7 @@ const Home: React.FC = () => {
             Popular Categories
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {CATEGORIES.map((cat) => (
+            {popularCategories?.map((cat) => (
               <Link
                 to={`/explore?category=${cat.id}`}
                 key={cat.id}
@@ -334,4 +335,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-

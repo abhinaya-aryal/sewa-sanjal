@@ -1,5 +1,8 @@
-import Elysia from "elysia";
-import { CategoryPlainInputCreate } from "../../../prisma/prismabox/Category";
+import Elysia, { t } from "elysia";
+import {
+  CategoryPlain,
+  CategoryPlainInputCreate,
+} from "../../../prisma/prismabox/Category";
 import {
   assignCategoryToProvider,
   createCategory,
@@ -25,9 +28,13 @@ export const categories = new Elysia({
     { body: CategoryPlainInputCreate, rolesGuard: [Role.ADMIN] },
   )
 
-  .get("/", () => {
-    return getAllCategories();
-  })
+  .get(
+    "/",
+    () => {
+      return getAllCategories();
+    },
+    { response: t.Array(CategoryPlain) },
+  )
 
   .delete(
     "/:id/providers/:providerId",

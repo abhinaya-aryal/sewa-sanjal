@@ -16,9 +16,6 @@ export const useLogin = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user });
     },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 };
 

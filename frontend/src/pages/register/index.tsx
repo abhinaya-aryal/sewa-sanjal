@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { MockService } from "../../services/mockService";
 import { Role, User as UserType } from "../../types";
+import { useRegister } from "./_hook";
 
 interface RegisterProps {
   onLoginSuccess: (user: UserType) => void;
@@ -24,27 +25,17 @@ const Register: React.FC<RegisterProps> = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { mutateAsync, error: registerError } = useRegister();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
     if (password.length < 6) {
       setError("Password must be at least 6 characters long");
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const user = await MockService.register(name, email, password, role);
-      onLoginSuccess(user);
-      navigate("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Registration failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    await mutateAsync({ name, email, password, role });
+    setError(registerError.message);
   };
 
   return (

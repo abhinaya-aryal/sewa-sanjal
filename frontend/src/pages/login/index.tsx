@@ -13,8 +13,7 @@ const LoginSchema = z.object({
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const { mutateAsync, isPending } = useLogin();
+  const { mutateAsync, isPending, error } = useLogin();
 
   const {
     register,
@@ -58,7 +57,7 @@ const Login: React.FC = () => {
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md flex items-start text-sm">
               <AlertCircle size={16} className="mt-0.5 mr-2 shrink-0" />
-              {error}
+              {error.message}
             </div>
           )}
 
