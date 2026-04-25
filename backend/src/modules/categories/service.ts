@@ -1,5 +1,5 @@
 import { NotFoundError } from "elysia";
-import { prisma } from "../../../prisma";
+import { prisma } from "@prisma/index";
 
 export async function createCategory(data: any) {
   const existingName = await prisma.category.findUnique({

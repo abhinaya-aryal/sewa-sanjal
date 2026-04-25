@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { User, Booking, Role, BookingStatus, Service } from "../../types";
 import { MockService } from "../../services/mockService";
 import {
@@ -22,19 +22,16 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { useAuthStore } from "@/src/store/authStore";
-import { useUser } from "@/src/pages/login/_hook";
+import { useUser } from "@queries/user";
 
 interface DashboardProps {
   user: User;
 }
 
 const Dashboard: React.FC<DashboardProps> = () => {
-  // const user = useAuthStore((state) => state.user);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [providerServices, setProviderServices] = useState<Service[]>([]);
   const { data: user, isLoading } = useUser();
-  // const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
     "UPCOMING" | "HISTORY" | "SERVICES"
   >("UPCOMING");

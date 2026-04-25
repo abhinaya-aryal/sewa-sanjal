@@ -7,14 +7,14 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Explore from "./components/screens/Explore";
 import ProviderDetails from "./components/screens/ProviderDetails";
 import Dashboard from "./components/screens/Dashboard";
 import ProtectedRoute from "./hoc/ProtectedRoute";
 import Login from "./pages/login";
-import { useUser } from "./pages/login/_hook";
 import Home from "./pages/home";
 import Register from "./pages/register";
+import Explore from "./pages/explore";
+import { useUser } from "@queries/user";
 
 const App: React.FC = () => {
   const { data: user } = useUser();

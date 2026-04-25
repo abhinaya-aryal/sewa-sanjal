@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "./_hook";
+import { useLogin } from "@queries/auth";
 
 const LoginSchema = z.object({
   email: z.email("Invalid email address").min(1, "Email is required"),

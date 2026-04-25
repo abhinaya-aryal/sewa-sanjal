@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   User as UserIcon,
   Briefcase,
@@ -9,23 +9,24 @@ import {
   AlertCircle,
   Check,
 } from "lucide-react";
-import { MockService } from "../../services/mockService";
 import { Role, User as UserType } from "../../types";
-import { useRegister } from "./_hook";
+import { useRegister } from "@queries/auth";
 
 interface RegisterProps {
   onLoginSuccess: (user: UserType) => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ onLoginSuccess }) => {
-  const navigate = useNavigate();
+const Register: React.FC<RegisterProps> = () => {
   const [role, setRole] = useState<Role>(Role.CUSTOMER);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { mutateAsync, error: registerError } = useRegister();
+  const [error, setError] = useState<string | undefined>("");
+  const {
+    mutateAsync,
+    error: registerError,
+    isPending: isLoading,
+  } = useRegister();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ const Register: React.FC<RegisterProps> = ({ onLoginSuccess }) => {
     }
 
     await mutateAsync({ name, email, password, role });
-    setError(registerError.message);
+    setError(registerError?.message);
   };
 
   return (

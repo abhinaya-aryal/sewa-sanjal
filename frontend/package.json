@@ -1,5 +1,9 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "sewa-sanjal",
+  "author": {
+    "name": "Abhinaya Aryal"
+  },
   "private": true,
   "version": "0.0.0",
   "type": "module",

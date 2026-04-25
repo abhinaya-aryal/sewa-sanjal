@@ -57,14 +57,35 @@ export async function getAllProviders(filters: {
         ? { path: "$.city", equals: filters?.city?.toLowerCase() }
         : undefined,
     },
-    include: { categories: true },
+    include: {
+      categories: true,
+      user: {
+        select: {
+          name: true,
+          avatarUrl: true,
+        },
+      },
+      services: {
+        select: {
+          price: true,
+        },
+      },
+    },
   });
 
-  if (!providers) {
-    throw new NotFoundError("Providers not found");
-  }
+  return providers.map((provider) => {
+    const minPrice =
+      provider.services.length > 0
+        ? Math.min(...provider.services.map((s) => s.price))
+        : null;
 
-  return providers;
+    const { services, ...rest } = provider;
+
+    return {
+      ...rest,
+      minPrice,
+    };
+  });
 }
 
 export async function getProvider(id: string) {

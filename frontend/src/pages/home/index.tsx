@@ -11,17 +11,17 @@ import {
   CalendarCheck,
   Smile,
 } from "lucide-react";
-import { CATEGORIES, MOCK_PROVIDERS } from "../../constants";
-import ProviderCard from "@/src/components/ProviderCard";
-import { usePopularCategories } from "./_hook";
+import ProviderCard from "@components/ProviderCard";
+import { usePopularCategories } from "@queries/category";
+import { useProviders } from "@queries/provider";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { data: popularCategories } = usePopularCategories();
+  const { data: featuredProviders } = useProviders({});
   const [searchQuery, setSearchQuery] = useState("");
-  const featuredProviders = MOCK_PROVIDERS.slice(0, 3);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/explore?search=${encodeURIComponent(searchQuery)}`);
@@ -68,9 +68,9 @@ const Home: React.FC = () => {
                     onSubmit={handleSearch}
                     className="relative group max-w-lg sm:mx-auto lg:mx-0"
                   >
-                    <div className="absolute -inset-1 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                    <div className="absolute -inset-1 bg-linear-to-r from-primary-400 to-secondary-400 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                     <div className="relative flex items-center bg-white rounded-lg p-2 shadow-xl border border-gray-100">
-                      <div className="flex-grow flex items-center px-4">
+                      <div className="grow flex items-center px-4">
                         <Search className="text-gray-400 mr-3" size={24} />
                         <input
                           type="text"
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
               alt="Professional working"
             />
             {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent lg:via-white/10"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-white via-white/40 to-transparent lg:via-white/10"></div>
 
             {/* Floating Elements */}
             <div className="absolute top-1/4 right-12 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-xl border border-white/50 animate-float hidden lg:block max-w-xs transform hover:scale-105 transition-transform cursor-default">
@@ -324,7 +324,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProviders.map((provider) => (
+            {featuredProviders?.map((provider) => (
               <ProviderCard key={provider.id} provider={provider} />
             ))}
           </div>

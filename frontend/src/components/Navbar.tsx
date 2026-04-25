@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
-import { useLogout, useUser } from "../pages/login/_hook";
+import { useLogout } from "@queries/auth";
+import { useUser } from "@queries/user";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);

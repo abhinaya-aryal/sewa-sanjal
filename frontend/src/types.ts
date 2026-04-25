@@ -1,25 +1,25 @@
-import React from 'react';
+import React from "react";
 
 export enum Role {
-  CUSTOMER = 'CUSTOMER',
-  PROVIDER = 'PROVIDER',
-  ADMIN = 'ADMIN'
+  CUSTOMER = "CUSTOMER",
+  PROVIDER = "PROVIDER",
+  ADMIN = "ADMIN",
 }
 
 export enum BookingStatus {
-  PENDING = 'PENDING',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED'
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
 }
 
 export enum PaymentStatus {
-  PENDING = 'PENDING',
-  SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
-  REFUNDED = 'REFUNDED'
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  FAILED = "FAILED",
+  REFUNDED = "REFUNDED",
 }
 
 export interface User {
@@ -57,13 +57,7 @@ export interface Provider {
   categories: Category[];
   services: Service[];
   isVerified: boolean;
-  location: {
-    city: string;
-    district: string;
-    address?: string;
-    lat?: number;
-    lng?: number;
-  };
+  location: string;
   rating: number; // Computed field for UI
   reviewCount: number; // Computed field for UI
   earnings: number;
@@ -101,3 +95,4 @@ export interface NavItem {
   path: string;
   icon?: React.ReactNode;
 }
+

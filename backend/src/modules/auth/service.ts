@@ -2,7 +2,7 @@ import { prisma } from "../../../prisma";
 import * as bcrypt from "bcrypt";
 import { UserPlainInputCreate } from "../../../prisma/prismabox/User";
 import { Static } from "elysia";
-import { JWTOption, JWTPayloadInput, JWTPayloadSpec } from "@elysiajs/jwt";
+import { Role } from "@prisma/generated/enums";
 
 export async function registerUser(body: Static<typeof UserPlainInputCreate>) {
   const existingEmail = await prisma.user.findUnique({
@@ -27,6 +27,25 @@ export async function registerUser(body: Static<typeof UserPlainInputCreate>) {
 
   const hashedPassword = await bcrypt.hash(body.password, 12);
   const { password, ...rest } = body;
+
+  if (body.role === Role.PROVIDER) {
+    const provider = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          ...rest,
+          password: hashedPassword,
+        },
+      });
+
+      await tx.provider.create({
+        data: {
+          userId: user.id,
+        },
+      });
+    });
+
+    return provider;
+  }
 
   return prisma.user.create({
     data: {

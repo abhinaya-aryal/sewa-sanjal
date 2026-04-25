@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useUser } from "../pages/login/_hook";
+import { useUser } from "@queries/user";
 
 type Props = {
   children: ReactNode;
