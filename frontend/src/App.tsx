@@ -15,6 +15,7 @@ import Home from "./pages/home";
 import Register from "./pages/register";
 import Explore from "./pages/explore";
 import { useUser } from "@queries/user";
+import Profile from "@pages/profile";
 
 const App: React.FC = () => {
   const { data: user } = useUser();
@@ -53,6 +54,14 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

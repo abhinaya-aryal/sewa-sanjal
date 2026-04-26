@@ -75,7 +75,6 @@ const Login: React.FC = () => {
                 </div>
                 <input
                   id="email"
-                  name="email"
                   type="email"
                   autoComplete="email"
                   required
@@ -99,7 +98,6 @@ const Login: React.FC = () => {
                 </div>
                 <input
                   id="password"
-                  name="password"
                   type="password"
                   autoComplete="current-password"
                   required
