@@ -1,7 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import Render from "./Render";
 import { useFormContext, get } from "react-hook-form";
-import { InputHTMLAttributes, ReactNode, useRef } from "react";
+import {
+  InputHTMLAttributes,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { LucideIcon } from "lucide-react";
 
 type FormInputProps = {
@@ -79,6 +85,8 @@ type ProfileImageInputProps = Pick<
   "name" | "label" | "required"
 > & {
   className?: { container?: string; label?: string; image?: string };
+  accepts?: string[];
+  defaultImage?: string;
 };
 
 export const ProfileImageInput = ({
@@ -86,11 +94,29 @@ export const ProfileImageInput = ({
   name,
   label,
   required = false,
+  accepts = ["image/*"],
+  defaultImage = "",
 }: ProfileImageInputProps) => {
   const formMethods = useFormContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const error = get(formMethods.formState.errors, name);
-  const imageUrl = "https://placehold.co/400";
+
+  const [preview, setPreview] = useState<string | null>(defaultImage || null);
+
+  const handleChange = (file?: File) => {
+    if (!file) return;
+
+    formMethods.setValue(name, file, { shouldValidate: true });
+
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   return (
     <div className={twMerge("", className?.container)}>
@@ -110,21 +136,23 @@ export const ProfileImageInput = ({
       </Render>
 
       <input
-        {...formMethods.register(name)}
-        ref={inputRef}
         className="w-full hidden"
         type="file"
+        accept={accepts.join(",")}
+        {...formMethods.register(name)}
+        ref={inputRef}
+        onChange={(e) => handleChange(e.target.files?.[0])}
       />
 
-      <div>
-        <img
-          src={imageUrl}
-          className={twMerge(
-            "w-28 rounded-full border-2 border-primary-500 bg-gray-200 shadow-sm",
-            className?.image,
-          )}
-        />
-      </div>
+      <img
+        onClick={() => inputRef.current?.click()}
+        src={preview || defaultImage}
+        alt={name}
+        className={twMerge(
+          "w-24 aspect-square object-cover object-top rounded-full border-2 border-primary-500 bg-gray-200 shadow-sm cursor-pointer",
+          className?.image,
+        )}
+      />
 
       <p
         className={twMerge(

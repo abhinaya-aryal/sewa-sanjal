@@ -21,9 +21,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <img
-                src={
-                  provider?.user?.avatarUrl || "https://picsum.photos/100/100"
-                }
+                src={provider?.user?.avatarUrl}
                 alt={provider.user.name}
                 className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
               />

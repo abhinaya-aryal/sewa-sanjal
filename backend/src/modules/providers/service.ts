@@ -1,6 +1,7 @@
 import { NotFoundError } from "elysia";
 import { prisma } from "../../../prisma";
 import { Role } from "../../../prisma/generated/enums";
+import { createUploadLink } from "@utils/upload";
 
 export async function createProvider(userId: string, data: any) {
   const existing = await prisma.provider.findUnique({
@@ -74,6 +75,7 @@ export async function getAllProviders(filters: {
   });
 
   return providers.map((provider) => {
+    const avatarUrl = createUploadLink(provider.user.avatarUrl);
     const minPrice =
       provider.services.length > 0
         ? Math.min(...provider.services.map((s) => s.price))
@@ -83,6 +85,10 @@ export async function getAllProviders(filters: {
 
     return {
       ...rest,
+      user: {
+        ...provider.user,
+        avatarUrl,
+      },
       minPrice,
     };
   });

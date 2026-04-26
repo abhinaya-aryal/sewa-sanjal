@@ -20,7 +20,7 @@ export const guardMacro = new Elysia({ name: "authGuard" })
           return status(401, "Invalid cookie or token");
         }
 
-        const payload = await jwt.verify(token);
+        const payload = await jwt.verify(token as string);
         if (!payload && enabled) {
           return status(401, "Invalid cookie or token");
         }

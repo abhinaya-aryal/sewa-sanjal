@@ -8,6 +8,7 @@ import { categories } from "./modules/categories";
 import { availabilities } from "./modules/availabilities";
 import { openApi } from "./plugins/openApi";
 import cors from "@elysiajs/cors";
+import staticPlugin from "@elysia/static";
 
 const app = new Elysia()
   .use(cors())
@@ -19,6 +20,7 @@ const app = new Elysia()
   .use(providers)
   .use(categories)
   .use(availabilities)
+  .use(staticPlugin())
   .listen(4000);
 
 console.log(

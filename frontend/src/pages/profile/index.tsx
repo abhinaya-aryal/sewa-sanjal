@@ -1,9 +1,31 @@
-import { Mail } from "lucide-react";
+import { Contact, Mail, User } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormInput, ProfileImageInput } from "@components/Forms";
+import { Button } from "@components/Button";
+import { UpdateUserBody, useUpdateUser, useUser } from "@queries/user";
 
 export default function Profile() {
-  const formMethods = useForm();
+  const { data: user } = useUser();
+  const formMethods = useForm({
+    defaultValues: {
+      name: user?.name,
+      phone: user?.phone,
+      email: user?.email,
+    },
+  });
+
+  const updateUser = useUpdateUser();
+
+  const handleSubmit = (data: UpdateUserBody) => {
+    updateUser.mutate(data, {
+      onSuccess: () => {
+        console.log("User update successfully");
+      },
+      onError: () => {
+        console.log("Something went wrong. Please try again");
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,20 +42,44 @@ export default function Profile() {
               </div>
             </div>
           </div>
-          <div className="bg-white w-full rounded-md p-5">
-            <FormProvider {...formMethods}>
-              <FormInput
-                name="name"
-                label="Name"
-                required
-                icon={<Mail size={16} className="text-gray-400" />}
-              />
 
-              <ProfileImageInput
-                name="avatar"
-                label="Profile Picture"
-                className={{ image: "w-60" }}
-              />
+          <div className="bg-white w-full rounded-md p-5 gap-8">
+            <FormProvider {...formMethods}>
+              <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+                <div className="grid grid-cols-3 gap-8">
+                  <div className="col-span-2">
+                    <FormInput
+                      name="name"
+                      label="Name"
+                      required
+                      icon={<User size={16} className="text-gray-400" />}
+                    />
+
+                    <FormInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      required
+                      icon={<Mail size={16} className="text-gray-400" />}
+                    />
+
+                    <FormInput
+                      name="phone"
+                      type="number"
+                      label="Contact"
+                      required
+                      icon={<Contact size={16} className="text-gray-400" />}
+                    />
+                  </div>
+                  <ProfileImageInput
+                    defaultImage={user?.avatarUrl}
+                    name="avatar"
+                    className={{ image: "w-60", container: "ml-auto" }}
+                  />
+                </div>
+
+                <Button type="submit">Save Changes</Button>
+              </form>
             </FormProvider>
           </div>
         </div>

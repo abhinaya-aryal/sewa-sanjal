@@ -207,7 +207,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             onClick={() => setActiveTab("UPCOMING")}
             className={`flex-1 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 transition-colors ${activeTab === "UPCOMING" ? "text-primary-700 bg-primary-50 border-b-2 border-primary-500" : "text-gray-500"}`}
           >
-            {user.role === Role.PROVIDER
+            {user?.role === Role.PROVIDER
               ? "Incoming & Active"
               : "Upcoming Bookings"}
           </button>
@@ -217,7 +217,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
           >
             Booking History
           </button>
-          {user.role === Role.PROVIDER && (
+          {user?.role === Role.PROVIDER && (
             <button
               onClick={() => setActiveTab("SERVICES")}
               className={`flex-1 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 transition-colors ${activeTab === "SERVICES" ? "text-primary-700 bg-primary-50 border-b-2 border-primary-500" : "text-gray-500"}`}
