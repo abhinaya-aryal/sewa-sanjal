@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { useLogout } from "@queries/auth";
 import { useUser } from "@queries/user";
@@ -7,6 +7,7 @@ import { useUser } from "@queries/user";
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data: currentUser } = useUser();
   const { mutate } = useLogout();
@@ -47,12 +48,15 @@ const Navbar: React.FC = () => {
           <div className="hidden sm:flex sm:items-center sm:ml-6">
             {currentUser ? (
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
+                <div
+                  className="flex items-center space-x-2 cursor-pointer"
+                  onClick={() => navigate("/profile")}
+                >
                   {currentUser.avatarUrl ? (
                     <img
                       src={currentUser.avatarUrl}
                       alt={currentUser.name}
-                      className="h-8 w-8 rounded-full border border-gray-200"
+                      className="h-8 w-8 object-center rounded-full border border-gray-200"
                     />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700">
@@ -137,7 +141,10 @@ const Navbar: React.FC = () => {
             <div className="mt-4 pt-4 border-t border-gray-200">
               {currentUser ? (
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => navigate("/profile")}
+                  >
                     <div className="shrink-0">
                       {currentUser.avatarUrl ? (
                         <img
