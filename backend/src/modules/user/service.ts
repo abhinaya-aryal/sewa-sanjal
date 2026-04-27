@@ -1,6 +1,7 @@
 import { NotFoundError, status } from "elysia";
 import { prisma } from "../../../prisma";
 import { createUploadLink, upload } from "@utils/upload";
+import { UserUpdateInput } from "@prisma/generated/models";
 
 export async function getAllUser() {
   return await prisma.user.findMany({
@@ -39,7 +40,7 @@ export async function getCurrentUser(id: string) {
 
 export async function updateCurrentUser(
   id: string,
-  body: { name?: string; avatar?: File; email?: string; phone?: string },
+  body: UserUpdateInput & { avatar?: File | null },
 ) {
   const user = await prisma.user.findUnique({
     where: { id },

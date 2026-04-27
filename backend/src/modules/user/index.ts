@@ -33,12 +33,7 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
     },
     {
       authGuard: true,
-      body: t.Object({
-        name: t.Optional(t.String()),
-        avatar: t.Optional(t.Nullable(t.File())),
-        email: t.Optional(t.String()),
-        phone: t.Optional(t.Nullable(t.String())),
-      }),
+      body: UserPlainInputUpdate,
     },
   )
   .get(
