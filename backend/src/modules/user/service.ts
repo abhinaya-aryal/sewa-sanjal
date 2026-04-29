@@ -1,7 +1,7 @@
 import { NotFoundError, status } from "elysia";
 import { prisma } from "../../../prisma";
-import { createUploadLink, upload } from "@utils/upload";
 import { UserUpdateInput } from "@prisma/generated/models";
+import { uploadFile } from "@utils/file";
 
 export async function getAllUser() {
   return await prisma.user.findMany({
@@ -33,9 +33,7 @@ export async function getCurrentUser(id: string) {
     return status("Not Found", { message: "User not found" });
   }
 
-  const avatarUrl = createUploadLink(user.avatarUrl);
-
-  return { ...user, avatarUrl };
+  return user;
 }
 
 export async function updateCurrentUser(
@@ -46,21 +44,23 @@ export async function updateCurrentUser(
     where: { id },
   });
 
-  const { avatar, ...rest } = body;
+  const { avatar, bio, ...rest } = body;
 
   let avatarUrl;
   if (avatar) {
-    avatarUrl = await upload(avatar);
+    avatarUrl = await uploadFile(avatar, user?.avatarUrl);
   }
 
   if (!user) {
     return status("Not Found", { message: "User not found" });
   }
 
-  return await prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: { id },
     data: { ...rest, avatarUrl: avatarUrl },
   });
+
+  return updatedUser;
 }
 
 export async function getUser(id: string) {

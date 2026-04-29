@@ -1,8 +1,10 @@
 import { Contact, Mail, User } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormInput, ProfileImageInput } from "@components/Forms";
+import { Input, ProfileImageInput, TextareaInput } from "@components/Forms";
 import { Button } from "@components/Button";
 import { UpdateUserBody, useUpdateUser, useUser } from "@queries/user";
+import Render from "@components/Render";
+import { createFileUrl } from "@utils/createFileUrl";
 
 export default function Profile() {
   const { data: user } = useUser();
@@ -48,14 +50,14 @@ export default function Profile() {
               <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
                 <div className="grid grid-cols-3 gap-8">
                   <div className="col-span-2">
-                    <FormInput
+                    <Input
                       name="name"
                       label="Name"
                       required
                       icon={<User size={16} className="text-gray-400" />}
                     />
 
-                    <FormInput
+                    <Input
                       name="email"
                       type="email"
                       label="Email"
@@ -63,7 +65,7 @@ export default function Profile() {
                       icon={<Mail size={16} className="text-gray-400" />}
                     />
 
-                    <FormInput
+                    <Input
                       name="phone"
                       type="number"
                       label="Contact"
@@ -72,12 +74,18 @@ export default function Profile() {
                     />
                   </div>
                   <ProfileImageInput
-                    defaultImage={user?.avatarUrl}
+                    defaultImage={createFileUrl(user?.avatarUrl)}
                     name="avatar"
                     className={{ image: "w-60", container: "ml-auto" }}
                   />
                 </div>
-
+                <Render
+                  when={Boolean(
+                    user?.role === "PROVIDER" || user?.role === "ADMIN",
+                  )}
+                >
+                  <TextareaInput name="bio" rows={4} label="Bio" />
+                </Render>
                 <Button type="submit">Save Changes</Button>
               </form>
             </FormProvider>

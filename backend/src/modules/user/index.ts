@@ -1,4 +1,4 @@
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 import {
   deleteUser,
   getAllUser,
@@ -9,6 +9,7 @@ import {
 import { Role } from "../../../prisma/generated/enums";
 import { guardMacro } from "../../plugins/guardMacro";
 import { UserPlainInputUpdate } from "@prisma/prismabox/User";
+import { t } from "elysia";
 
 export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
   .use(guardMacro)
@@ -33,7 +34,10 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
     },
     {
       authGuard: true,
-      body: UserPlainInputUpdate,
+      body: t.Object({
+        ...UserPlainInputUpdate.properties,
+        avatar: t.Optional(t.File()),
+      }),
     },
   )
   .get(

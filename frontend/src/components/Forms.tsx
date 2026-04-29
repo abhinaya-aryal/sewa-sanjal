@@ -4,6 +4,7 @@ import { useFormContext, get } from "react-hook-form";
 import {
   InputHTMLAttributes,
   ReactNode,
+  TextareaHTMLAttributes,
   useEffect,
   useRef,
   useState,
@@ -18,7 +19,7 @@ type FormInputProps = {
   icon?: ReactNode | LucideIcon;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const FormInput = ({
+export const Input = ({
   label = "",
   required = false,
   name,
@@ -59,7 +60,7 @@ export const FormInput = ({
           id={name}
           required={required}
           className={twMerge(
-            "focus:ring-primary-500 block w-full pl-10 pr-2 sm:text-sm border border-gray-300 rounded-md py-2",
+            "focus:ring-primary-500 block w-full pr-2 sm:text-sm border border-gray-300 rounded-md py-2",
             hasIcon ? "pl-10" : "pl-2",
             className?.input,
           )}
@@ -152,6 +153,63 @@ export const ProfileImageInput = ({
           "w-24 aspect-square object-cover object-top rounded-full border-2 border-primary-500 bg-gray-200 shadow-sm cursor-pointer",
           className?.image,
         )}
+      />
+
+      <p
+        className={twMerge(
+          "mt-1 text-sm text-red-600 min-h-5 transition-opacity duration-200",
+          error ? "opacity-100" : "opacity-0",
+        )}
+      >
+        {error?.message as string}
+      </p>
+    </div>
+  );
+};
+
+type TextareaInputProps = {
+  label?: string;
+  required?: boolean;
+  name: string;
+  className?: { container?: string; label?: string; input?: string };
+} & TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+export const TextareaInput = ({
+  label = "",
+  required = false,
+  name,
+  className,
+  ...rest
+}: TextareaInputProps) => {
+  const formMethods = useFormContext();
+  const error = get(formMethods.formState.errors, name);
+
+  return (
+    <div className={twMerge("", className?.container)}>
+      <Render when={Boolean(label)}>
+        <label
+          htmlFor={name}
+          className={twMerge(
+            "block text-sm font-medium text-gray-700 mb-1",
+            className?.label,
+          )}
+        >
+          {label}
+          <Render when={required}>
+            <span className="text-red-600 font-semibold">&nbsp;*</span>
+          </Render>
+        </label>
+      </Render>
+
+      <textarea
+        id={name}
+        required={required}
+        className={twMerge(
+          "focus:ring-primary-500 block w-full p-2 sm:text-sm border border-gray-300 rounded-md shadow-sm",
+          className?.input,
+        )}
+        {...formMethods.register(name)}
+        {...rest}
       />
 
       <p

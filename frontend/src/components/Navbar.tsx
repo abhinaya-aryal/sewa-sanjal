@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { useLogout } from "@queries/auth";
 import { useUser } from "@queries/user";
+import { createFileUrl } from "@utils/createFileUrl";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -54,9 +55,9 @@ const Navbar: React.FC = () => {
                 >
                   {currentUser.avatarUrl ? (
                     <img
-                      src={currentUser.avatarUrl}
+                      src={createFileUrl(currentUser.avatarUrl)}
                       alt={currentUser.name}
-                      className="h-8 w-8 object-center rounded-full border border-gray-200"
+                      className="h-8 w-8 object-cover object-top rounded-full border border-gray-200"
                     />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700">
@@ -148,9 +149,9 @@ const Navbar: React.FC = () => {
                     <div className="shrink-0">
                       {currentUser.avatarUrl ? (
                         <img
-                          className="h-10 w-10 rounded-full"
-                          src={currentUser.avatarUrl}
-                          alt=""
+                          className="h-10 w-10 rounded-full object-cover object-top"
+                          src={createFileUrl(currentUser.avatarUrl)}
+                          alt={currentUser.name}
                         />
                       ) : (
                         <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">

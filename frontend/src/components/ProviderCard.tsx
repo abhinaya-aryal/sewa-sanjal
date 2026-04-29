@@ -3,6 +3,7 @@ import { Star, MapPin, BadgeCheck } from "lucide-react";
 import { Provider } from "../types";
 import { Link } from "react-router-dom";
 import Render from "./Render";
+import { createFileUrl } from "@utils/createFileUrl";
 
 interface ProviderCardProps {
   provider: Provider;
@@ -21,7 +22,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <img
-                src={provider?.user?.avatarUrl}
+                src={createFileUrl(provider?.user?.avatarUrl)}
                 alt={provider.user.name}
                 className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
               />
