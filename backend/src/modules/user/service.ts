@@ -44,20 +44,35 @@ export async function updateCurrentUser(
     where: { id },
   });
 
-  const { avatar, bio, ...rest } = body;
+  if (!user) {
+    return status("Not Found", { message: "User not found" });
+  }
+
+  const { avatar, bio, phone, ...rest } = body;
+
+  if (phone) {
+    const existingPhone = await prisma.user.findUnique({
+      where: {
+        phone,
+        NOT: {
+          id: id,
+        },
+      },
+    });
+
+    if (existingPhone) {
+      throw status("Conflict", "Phone no. already exists in the system");
+    }
+  }
 
   let avatarUrl;
   if (avatar) {
     avatarUrl = await uploadFile(avatar, user?.avatarUrl);
   }
 
-  if (!user) {
-    return status("Not Found", { message: "User not found" });
-  }
-
   const updatedUser = await prisma.user.update({
     where: { id },
-    data: { ...rest, avatarUrl: avatarUrl },
+    data: { ...rest, phone, avatarUrl: avatarUrl },
   });
 
   return updatedUser;

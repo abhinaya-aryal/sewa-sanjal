@@ -9,8 +9,18 @@ export const auth = new Elysia({
 })
   .use(jwtPlugin)
 
+  // TODO: Allow any string in phone number
+  // Normalize the phone no
+  // Check for empty value
+  // IF empty then null
+  // Check for 10 digit validation
   .post("/register", async ({ body }) => await registerUser(body), {
-    body: UserPlainInputCreate,
+    body: t.Object({
+      ...UserPlainInputCreate.properties,
+      phone: t.Optional(
+        t.Union([t.String({ minLength: 10, maxLength: 10 }), t.Literal("")]),
+      ),
+    }),
   })
 
   .post(
@@ -57,7 +67,7 @@ export const auth = new Elysia({
     return status(200, { message: "Logged out successfully" });
   })
 
-  .post("/refresh", async ({ cookie, set }) => {
+  .post("/refresh", async ({ cookie }) => {
     const refreshTokenValue = cookie?.refreshToken?.value;
 
     if (!refreshTokenValue) {

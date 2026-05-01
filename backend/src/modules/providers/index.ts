@@ -40,16 +40,16 @@ export const providers = new Elysia({
 
   .get(
     "/",
-    ({ query: { category, city, verified } }) => {
-      return getAllProviders({ category, city, verified });
+    ({ query: { category, city, verified, search } }) => {
+      return getAllProviders({ category, city, verified, search });
     },
     {
       query: t.Object({
         category: t.Optional(t.String()),
         city: t.Optional(t.String()),
         verified: t.Optional(t.Boolean()),
+        search: t.Optional(t.String()),
       }),
-      authGuard: true,
     },
   )
 

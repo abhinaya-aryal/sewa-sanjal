@@ -46,16 +46,46 @@ export async function getAllProviders(filters: {
   category?: string;
   city?: string;
   verified?: boolean;
+  search?: string;
 }) {
   const providers = await prisma.provider.findMany({
     where: {
-      isVerified: filters?.verified,
-      categories: filters?.category
-        ? { some: { id: filters?.category } }
-        : undefined,
-      location: filters.city
-        ? { path: "$.city", equals: filters?.city?.toLowerCase() }
-        : undefined,
+      AND: [
+        { isVerified: filters?.verified },
+        filters.category
+          ? { categories: { some: { id: filters.category } } }
+          : {},
+        filters.city
+          ? {
+              location: {
+                path: "$.city",
+                equals: filters?.city?.toLowerCase(),
+              },
+            }
+          : {},
+        filters.search
+          ? {
+              OR: [
+                {
+                  user: {
+                    name: {
+                      contains: filters.search,
+                    },
+                  },
+                },
+                {
+                  services: {
+                    some: {
+                      title: {
+                        contains: filters.search,
+                      },
+                    },
+                  },
+                },
+              ],
+            }
+          : {},
+      ],
     },
     include: {
       categories: true,

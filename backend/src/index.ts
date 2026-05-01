@@ -1,5 +1,4 @@
 import { Elysia } from "elysia";
-import { errorHandler } from "./plugins/errorHandler";
 import { auth } from "./modules/auth";
 import { user } from "./modules/user";
 import { services } from "./modules/services";
@@ -9,11 +8,14 @@ import { availabilities } from "./modules/availabilities";
 import { openApi } from "./plugins/openApi";
 import cors from "@elysiajs/cors";
 import staticPlugin from "@elysia/static";
+import { error } from "@plugins/error";
+import { normalize } from "@plugins/normalize";
 
-const app = new Elysia()
+const app = new Elysia({ allowUnsafeValidationDetails: true })
   .use(cors())
   .use(openApi)
-  .use(errorHandler)
+  .use(error)
+  .use(normalize)
   .use(auth)
   .use(user)
   .use(services)

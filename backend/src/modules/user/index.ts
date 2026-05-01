@@ -13,6 +13,7 @@ import { t } from "elysia";
 
 export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
   .use(guardMacro)
+
   .get(
     "/",
     () => {
@@ -20,6 +21,7 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
     },
     { authGuard: true },
   )
+
   .get(
     "/me",
     ({ user }) => {
@@ -27,6 +29,7 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
     },
     { authGuard: true },
   )
+
   .patch(
     "/me",
     ({ user, body }) => {
@@ -40,6 +43,7 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
       }),
     },
   )
+
   .get(
     "/:id",
     ({ params: { id } }) => {
@@ -47,6 +51,7 @@ export const user = new Elysia({ prefix: "/users", tags: ["Users"] })
     },
     { rolesGuard: [Role.ADMIN] },
   )
+
   .delete(
     "/:id",
     ({ params: { id } }) => {

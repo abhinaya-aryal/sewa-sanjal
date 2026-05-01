@@ -42,6 +42,8 @@ export async function registerUser(body: Static<typeof UserPlainInputCreate>) {
           userId: user.id,
         },
       });
+
+      return user;
     });
 
     return provider;

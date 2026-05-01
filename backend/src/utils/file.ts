@@ -1,4 +1,5 @@
 import { randomUUIDv7 } from "bun";
+import { status } from "elysia";
 import { basename, extname, join } from "path";
 
 const PUBLIC_DIR = join(process.cwd(), "public");
@@ -17,11 +18,11 @@ export const uploadFile = async (
   remove?: string | null,
 ): Promise<string> => {
   if (!file.type.startsWith("image/")) {
-    throw new Error("Provided file type is not supported");
+    throw status("Unprocessable Content", "Only image files are allowed.");
   }
 
   if (file.size > MAX_SIZE) {
-    throw new Error("File too large");
+    throw status("Unprocessable Content", "File should be max 2MB");
   }
 
   if (remove) {
@@ -37,7 +38,7 @@ export const uploadFile = async (
     await Bun.write(filepath, buffer);
     return filename;
   } catch (error) {
-    throw new Error("Failed to update file");
+    throw status("Internal Server Error", "Unable to upload file");
   }
 };
 
