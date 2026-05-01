@@ -1,72 +1,19 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState } from "react";
 import { Search, Filter } from "lucide-react";
-import { MOCK_PROVIDERS } from "../../constants";
-import { useSearchParams } from "react-router-dom";
 import ProviderCard from "@components/ProviderCard";
 import { usePopularCategories } from "@queries/category";
 import { ProviderFilters, useProviders } from "@queries/provider";
 import { useQueryParams } from "@utils/useQueryParams";
 
 const Explore: React.FC = () => {
-  const { params, setParams } = useQueryParams<ProviderFilters>();
+  const { params, setParams, clearParams } = useQueryParams<ProviderFilters>();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialSearch = searchParams.get("search") || "";
-
-  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [locationFilter, setLocationFilter] = useState("");
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState("all"); // all, low, medium, high
 
   const { data: categories } = usePopularCategories();
   const { data: providers } = useProviders(params);
-
-  useEffect(() => {
-    setSearchTerm(initialSearch);
-  }, [initialSearch]);
-
-  const filteredProviders = useMemo(() => {
-    let result = MOCK_PROVIDERS.filter((provider) => {
-      const matchesSearch =
-        provider.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.services.some((s) =>
-          s.title.toLowerCase().includes(searchTerm.toLowerCase()),
-        );
-
-      const matchesLocation =
-        locationFilter === "" ||
-        provider.location.toLowerCase().includes(locationFilter.toLowerCase());
-
-      const minPrice = Math.min(...provider.services.map((s) => s.price));
-      let matchesPrice = true;
-      if (priceRange === "low") matchesPrice = minPrice < 1000;
-      else if (priceRange === "medium")
-        matchesPrice = minPrice >= 1000 && minPrice <= 3000;
-      else if (priceRange === "high") matchesPrice = minPrice > 3000;
-
-      return matchesSearch && matchesLocation && matchesPrice;
-    });
-
-    // Sorting
-    if (sortBy === "priceAsc") {
-      result.sort(
-        (a, b) =>
-          Math.min(...a.services.map((s) => s.price)) -
-          Math.min(...b.services.map((s) => s.price)),
-      );
-    } else if (sortBy === "priceDesc") {
-      result.sort(
-        (a, b) =>
-          Math.min(...b.services.map((s) => s.price)) -
-          Math.min(...a.services.map((s) => s.price)),
-      );
-    } else if (sortBy === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
-  }, [searchTerm, locationFilter, sortBy, priceRange]);
 
   const handleCategoryChange = (catId: string) => {
     setParams({ category: catId });
@@ -95,8 +42,8 @@ const Explore: React.FC = () => {
                 type="text"
                 className="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2.5 border"
                 placeholder="Search providers or services..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={params?.search ?? ""}
+                onChange={(e) => setParams({ search: e.target.value })}
               />
             </div>
 
@@ -236,7 +183,7 @@ const Explore: React.FC = () => {
 
           {/* Results Grid */}
           <div className="flex-1">
-            {filteredProviders.length > 0 ? (
+            {providers?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {providers?.map((provider) => (
                   <ProviderCard key={provider.id} provider={provider} />
@@ -253,12 +200,7 @@ const Explore: React.FC = () => {
                   looking for.
                 </p>
                 <button
-                  onClick={() => {
-                    setSearchTerm("");
-                    setPriceRange("all");
-                    setLocationFilter("");
-                    setSelectedCategory("all");
-                  }}
+                  onClick={clearParams}
                   className="mt-4 text-primary-600 hover:underline"
                 >
                   Clear all filters

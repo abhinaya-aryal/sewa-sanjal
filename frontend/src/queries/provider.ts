@@ -5,6 +5,7 @@ export type ProviderFilters = {
   category?: string;
   city?: string;
   verified?: boolean;
+  search?: string;
 };
 
 export const QUERY_KEYS = {
