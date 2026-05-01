@@ -18,3 +18,11 @@ export const useProviders = (filters: ProviderFilters) => {
     queryFn: () => edenHandler(api.providers.get({ query: filters })),
   });
 };
+
+export const useProvider = (id?: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.providers, id],
+    queryFn: () => edenHandler(api.providers({ id }).get()),
+    enabled: !!id,
+  });
+};

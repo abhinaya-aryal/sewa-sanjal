@@ -10,8 +10,6 @@ interface ProviderCardProps {
 }
 
 const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
-  console.log(provider);
-
   return (
     <Link
       to={`/provider/${provider.id}`}

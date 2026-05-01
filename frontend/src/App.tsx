@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ProviderDetails from "./components/screens/ProviderDetails";
 import Dashboard from "./components/screens/Dashboard";
 import ProtectedRoute from "./hoc/ProtectedRoute";
 import Login from "./pages/login";
@@ -16,6 +15,7 @@ import Register from "./pages/register";
 import Explore from "./pages/explore";
 import { useUser } from "@queries/user";
 import Profile from "@pages/profile";
+import ProviderDetails from "@pages/provider";
 
 const App: React.FC = () => {
   const { data: user } = useUser();

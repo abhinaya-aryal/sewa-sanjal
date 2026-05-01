@@ -5,9 +5,12 @@ import { Button } from "@components/Button";
 import { UpdateUserBody, useUpdateUser, useUser } from "@queries/user";
 import Render from "@components/Render";
 import { createFileUrl } from "@utils/createFileUrl";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { data: user } = useUser();
+  const navigate = useNavigate();
+
   const formMethods = useForm({
     defaultValues: {
       name: user?.name,
@@ -19,14 +22,7 @@ export default function Profile() {
   const updateUser = useUpdateUser();
 
   const handleSubmit = (data: UpdateUserBody) => {
-    updateUser.mutate(data, {
-      onSuccess: () => {
-        console.log("User update successfully");
-      },
-      onError: () => {
-        console.log("Something went wrong. Please try again");
-      },
-    });
+    updateUser.mutate(data);
   };
 
   return (
@@ -38,8 +34,15 @@ export default function Profile() {
               <div className="space-y-1">
                 <button
                   className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors bg-primary-50 text-primary-700 font-medium hover:bg-gray-50 cursor-pointer`}
+                  onClick={() => navigate("/profile")}
                 >
                   Profile
+                </button>
+                <button
+                  className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors bg-primary-50 text-primary-700 font-medium hover:bg-gray-50 cursor-pointer`}
+                  onClick={() => navigate("/profile/services")}
+                >
+                  Services
                 </button>
               </div>
             </div>
