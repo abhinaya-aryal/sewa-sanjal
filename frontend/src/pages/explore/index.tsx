@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Search, Filter } from "lucide-react";
 import ProviderCard from "@components/ProviderCard";
 import { usePopularCategories } from "@queries/category";
 import { ProviderFilters, useProviders } from "@queries/provider";
 import { useQueryParams } from "@utils/useQueryParams";
+import { useDebouncedParam } from "@utils/debounce";
 
 const Explore: React.FC = () => {
   const { params, setParams, clearParams } = useQueryParams<ProviderFilters>();
@@ -14,6 +15,8 @@ const Explore: React.FC = () => {
 
   const { data: categories } = usePopularCategories();
   const { data: providers } = useProviders(params);
+
+  const debouncedSearch = useDebouncedParam();
 
   const handleCategoryChange = (catId: string) => {
     setParams({ category: catId });
@@ -42,8 +45,10 @@ const Explore: React.FC = () => {
                 type="text"
                 className="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2.5 border"
                 placeholder="Search providers or services..."
-                value={params?.search ?? ""}
-                onChange={(e) => setParams({ search: e.target.value })}
+                defaultValue={params?.search ?? ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  debouncedSearch(e.target.value)
+                }
               />
             </div>
 

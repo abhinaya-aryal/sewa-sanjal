@@ -8,6 +8,8 @@ import {
   User,
 } from "./types";
 
+export const DEBOUNCE = 500;
+
 export const CATEGORIES: Category[] = [
   { id: "c1", name: "Plumbing", slug: "plumbing", icon: "Wrench" },
   { id: "c2", name: "Electrical", slug: "electrical", icon: "Zap" },
