@@ -9,6 +9,8 @@ import Register from "@pages/register";
 import Profile from "@pages/profile";
 import Dashboard from "@components/screens/Dashboard";
 import GuestLayout from "@layout/GuestLayout";
+import ProfileLayout from "@layout/_components/ProfileLayout";
+import ProfileService from "@pages/profile/services";
 
 export const router = createBrowserRouter([
   {
@@ -39,8 +41,17 @@ export const router = createBrowserRouter([
             path: "/provider/:id",
             element: <ProviderDetails />,
           },
-          { path: "/profile", element: <Profile /> },
-
+          {
+            path: "/profile",
+            element: <ProfileLayout />,
+            children: [
+              { index: true, element: <Profile /> },
+              {
+                path: "services",
+                element: <ProfileService />,
+              },
+            ],
+          },
           { path: "/dashboard", element: <Dashboard /> },
         ],
       },

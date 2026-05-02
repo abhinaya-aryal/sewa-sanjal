@@ -9,7 +9,7 @@ type ButtonProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const base =
-  "flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium focus:outline-none cursor-pointer border disabled:opacity-50 disabled:cursor-not-allowed";
+  "flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium focus:outline-none cursor-pointer border h-max disabled:opacity-50 disabled:cursor-not-allowed";
 
 const variants = {
   primary:

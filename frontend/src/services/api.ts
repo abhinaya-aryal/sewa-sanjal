@@ -14,5 +14,5 @@ export async function edenHandler<T, E = unknown>(
 ): Promise<T> {
   const { data, error } = await promise;
   if (error) throw error;
-  return data;
+  return data as T;
 }
