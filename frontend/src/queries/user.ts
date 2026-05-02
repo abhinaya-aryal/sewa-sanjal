@@ -1,9 +1,4 @@
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, edenHandler } from "@services/api";
 import { Treaty } from "@elysiajs/eden";
 
@@ -23,13 +18,13 @@ export const useUser = () => {
 };
 
 export const useUpdateUser = () => {
-  const queryCLient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: QUERY_KEYS.user,
     mutationFn: (body: UpdateUserBody) => edenHandler(api.users.me.patch(body)),
     onSuccess: () => {
-      queryCLient.invalidateQueries({ queryKey: QUERY_KEYS.user });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user });
     },
   });
 };

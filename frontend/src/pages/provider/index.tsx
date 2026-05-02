@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Star,
@@ -11,18 +11,16 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import { MockService } from "../../services/mockService";
-import { Service, User, Review } from "../../types";
+import { Service, Review } from "../../types";
 import BookingModal from "@components/BookingModal";
 import { useProvider } from "@queries/provider";
 import { createFileUrl } from "@utils/createFileUrl";
+import { useUser } from "@queries/user";
 
-interface ProviderDetailsProps {
-  currentUser: User | null;
-}
-
-const ProviderDetails: React.FC<ProviderDetailsProps> = ({ currentUser }) => {
+const ProviderDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { data: provider, isLoading } = useProvider(id);
+  const { data: currentUser } = useUser();
 
   const navigate = useNavigate();
 

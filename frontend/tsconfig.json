@@ -21,7 +21,9 @@
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
       "@hoc/*": ["src/hoc/*"],
-      "@queries/*": ["src/queries/*"]
+      "@queries/*": ["src/queries/*"],
+      "@router/*": ["src/router/*"],
+      "@layout/*": ["src/layout/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

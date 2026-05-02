@@ -24,11 +24,7 @@ import {
 } from "recharts";
 import { useUser } from "@queries/user";
 
-interface DashboardProps {
-  user: User;
-}
-
-const Dashboard: React.FC<DashboardProps> = () => {
+const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [providerServices, setProviderServices] = useState<Service[]>([]);
   const { data: user, isLoading } = useUser();
