@@ -22,10 +22,15 @@ export const Button = ({
   children,
   className,
   variant = "primary",
+  type = "button",
   ...props
 }: ButtonProps) => {
   return (
-    <button {...props} className={twMerge(base, variants[variant], className)}>
+    <button
+      type={type}
+      {...props}
+      className={twMerge(base, variants[variant], className)}
+    >
       {children}
     </button>
   );

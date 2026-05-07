@@ -25,6 +25,7 @@ export const openApi = new Elysia().use(
       },
       tags: [
         { name: "Auth", description: "Authentication endpoints" },
+        { name: "Address", description: "Address endpoints" },
         { name: "Users", description: "User endpoints" },
         { name: "Services", description: "Services endpoints" },
         { name: "Providers", description: "Providers endpoints" },

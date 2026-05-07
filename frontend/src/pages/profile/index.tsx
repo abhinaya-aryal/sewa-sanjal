@@ -1,6 +1,11 @@
 import { Contact, Mail, User } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Input, ProfileImageInput, TextareaInput } from "@components/Forms";
+import {
+  NormalInput,
+  ProfileImageInput,
+  SelectInput,
+  TextareaInput,
+} from "@components/Forms";
 import { Button } from "@components/Button";
 import { UpdateUserBody, useUpdateUser, useUser } from "@queries/user";
 import Render from "@components/Render";
@@ -29,14 +34,14 @@ export default function Profile() {
         <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
           <div className="grid grid-cols-3 gap-8">
             <div className="col-span-2">
-              <Input
+              <NormalInput
                 name="name"
                 label="Name"
                 required
                 icon={<User size={16} className="text-gray-400" />}
               />
 
-              <Input
+              <NormalInput
                 name="email"
                 type="email"
                 label="Email"
@@ -44,13 +49,15 @@ export default function Profile() {
                 icon={<Mail size={16} className="text-gray-400" />}
               />
 
-              <Input
+              <NormalInput
                 name="phone"
                 type="number"
                 label="Contact"
                 required
                 icon={<Contact size={16} className="text-gray-400" />}
               />
+
+              <SelectInput name="province" options={[]} />
             </div>
             <ProfileImageInput
               defaultImage={createFileUrl(user?.avatarUrl)}

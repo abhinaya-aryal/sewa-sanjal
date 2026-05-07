@@ -1,5 +1,5 @@
 import { Button } from "@components/Button";
-import { Input, TextareaInput } from "@components/Forms";
+import { NormalInput, TextareaInput } from "@components/Forms";
 import { Modal } from "@components/Modal";
 import { useCreateService } from "@queries/service";
 import { Activity, useState } from "react";
@@ -41,20 +41,28 @@ export default function ProfileService() {
         >
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-              <Input name="title" label="Title" required />
+              <NormalInput name="title" label="Title" required />
               <TextareaInput name="description" rows={4} label="Description" />
               <div className="flex flex-row gap-3">
-                <Input
+                <NormalInput
                   name="durationMin"
                   label="Duration (Minutes)"
                   required
                   type="number"
                 />
-                <Input name="price" label="Price" required type="number" />
+                <NormalInput
+                  name="price"
+                  label="Price"
+                  required
+                  type="number"
+                />
               </div>
-              <Button type="submit" className="ml-auto">
-                Save
-              </Button>
+              <div className="w-max flex flex-row gap-3 ml-auto">
+                <Button variant="neutral" onClick={() => setIsModalOpen(false)}>
+                  Close
+                </Button>
+                <Button type="submit">Save</Button>
+              </div>
             </form>
           </FormProvider>
         </Modal>

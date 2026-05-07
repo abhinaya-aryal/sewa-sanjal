@@ -10,6 +10,7 @@ import cors from "@elysiajs/cors";
 import staticPlugin from "@elysia/static";
 import { error } from "@plugins/error";
 import { normalize } from "@plugins/normalize";
+import { address } from "@modules/address";
 
 const app = new Elysia({ allowUnsafeValidationDetails: true })
   .use(cors())
@@ -22,6 +23,7 @@ const app = new Elysia({ allowUnsafeValidationDetails: true })
   .use(providers)
   .use(categories)
   .use(availabilities)
+  .use(address)
   .use(staticPlugin())
   .listen(4000);
 
