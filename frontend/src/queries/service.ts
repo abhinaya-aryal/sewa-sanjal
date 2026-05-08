@@ -1,4 +1,4 @@
-import { api, edenHandler } from "@services/api";
+import { apiClient } from "@services/api";
 import { useMutation } from "@tanstack/react-query";
 
 const QUERY_KEYS = {
@@ -8,6 +8,7 @@ const QUERY_KEYS = {
 export const useCreateService = () => {
   return useMutation({
     mutationKey: [QUERY_KEYS.service],
-    mutationFn: ({ body }) => edenHandler(api.services.post(body)),
+    mutationFn: ({ body }) =>
+      apiClient("/services", { method: "POST", data: body }),
   });
 };

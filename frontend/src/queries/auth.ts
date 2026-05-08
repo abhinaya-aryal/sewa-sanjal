@@ -1,9 +1,6 @@
+import { apiClient } from "@services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { edenHandler, api } from "@services/api";
-import { Treaty } from "@elysiajs/eden";
-
-export type RegisterBody = Treaty.Data<typeof api.auth.register.post>;
 
 const QUERY_KEYS = {
   register: ["register"],
@@ -17,8 +14,8 @@ export const useRegister = () => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.register,
-    mutationFn: (body: RegisterBody) =>
-      edenHandler(api.auth.register.post(body)),
+    mutationFn: (body) =>
+      apiClient("/auth/register", { data: body, method: "POST" }),
     onSuccess: () => {
       navigate("/login");
     },
@@ -30,7 +27,8 @@ export const useLogin = () => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.login,
-    mutationFn: (body) => edenHandler(api.auth.login.web.post(body)),
+    mutationFn: (body) =>
+      apiClient("/auth/login/web", { data: body, method: "POST" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user });
     },
@@ -42,7 +40,7 @@ export const useLogout = () => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.logout,
-    mutationFn: () => edenHandler(api.auth.logout.post()),
+    mutationFn: () => apiClient("/auth/logout", { method: "POST" }),
     onSuccess: () => {
       queryClient.setQueryData(QUERY_KEYS.user, null);
       queryClient.clear();

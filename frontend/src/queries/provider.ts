@@ -1,4 +1,4 @@
-import { api, edenHandler } from "@services/api";
+import { apiClient } from "@services/api";
 import { useQuery } from "@tanstack/react-query";
 
 export type ProviderFilters = {
@@ -15,14 +15,14 @@ export const QUERY_KEYS = {
 export const useProviders = (filters: ProviderFilters) => {
   return useQuery({
     queryKey: [QUERY_KEYS.providers, filters],
-    queryFn: () => edenHandler(api.providers.get({ query: filters })),
+    queryFn: () => apiClient("/providers", { query: filters }),
   });
 };
 
 export const useProvider = (id?: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.providers, id],
-    queryFn: () => edenHandler(api.providers({ id }).get()),
+    queryFn: () => apiClient(`/providers/${id}`),
     enabled: !!id,
   });
 };

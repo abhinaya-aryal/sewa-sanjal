@@ -312,7 +312,7 @@ export const SelectInput = ({
   const customStyles: StylesConfig<SelectOption, boolean> = {
     control: (base, state) => ({
       ...base,
-      minHeight: "42px",
+      // minHeight: "42px",
       borderColor: error
         ? "#dc2626"
         : state.isFocused

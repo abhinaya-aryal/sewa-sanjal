@@ -56,13 +56,44 @@ export default function Profile() {
                 required
                 icon={<Contact size={16} className="text-gray-400" />}
               />
-
-              <SelectInput name="province" options={[]} />
             </div>
             <ProfileImageInput
               defaultImage={createFileUrl(user?.avatarUrl)}
               name="avatar"
               className={{ image: "w-60", container: "ml-auto" }}
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-x-4">
+            <SelectInput
+              name="province"
+              options={[]}
+              label="Province"
+              required
+            />
+            <SelectInput
+              name="district"
+              options={[]}
+              label="District"
+              required
+            />
+            <SelectInput
+              name="municipality"
+              options={[]}
+              label="Municipality"
+              required
+            />
+            <NormalInput name="address" label="Tole/City" required />
+            <NormalInput
+              name="latitude"
+              type="number"
+              label="Latitude"
+              required
+            />
+            <NormalInput
+              name="longitude"
+              type="number"
+              label="Longitude"
+              required
             />
           </div>
           <Render

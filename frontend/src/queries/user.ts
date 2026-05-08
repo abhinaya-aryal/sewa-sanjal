@@ -1,8 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, edenHandler } from "@services/api";
-import { Treaty } from "@elysiajs/eden";
-
-export type UpdateUserBody = Treaty.Data<typeof api.users.me.patch>;
+import { apiClient } from "@services/api";
 
 const QUERY_KEYS = {
   user: ["user"],
@@ -11,7 +8,7 @@ const QUERY_KEYS = {
 export const useUser = () => {
   return useQuery({
     queryKey: QUERY_KEYS.user,
-    queryFn: () => edenHandler(api.users.me.get()),
+    queryFn: () => apiClient("/users/me"),
     staleTime: Infinity,
     retry: false,
   });
@@ -22,7 +19,7 @@ export const useUpdateUser = () => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.user,
-    mutationFn: (body: UpdateUserBody) => edenHandler(api.users.me.patch(body)),
+    mutationFn: (body) => edenHandler(api.users.me.patch(body)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user });
     },
