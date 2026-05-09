@@ -232,7 +232,7 @@ export const TextareaInput = ({
   );
 };
 
-type SelectOption = {
+export type SelectOption = {
   label: string;
   value: string | number;
   [key: string]: any;
@@ -263,16 +263,16 @@ type SelectInputProps = Pick<FormInputProps, "name" | "label" | "required"> & {
   selectProps?: Partial<
     ReactSelectProps<SelectOption, boolean, GroupBase<SelectOption>>
   >;
+
+  onChange?: (value: any, selected: any) => void;
 };
 
 export const SelectInput = ({
   name,
   label = "",
   required = false,
-
   options = [],
   loadOptions,
-
   isMulti = false,
   isSearchable = true,
   isClearable = true,
@@ -280,15 +280,13 @@ export const SelectInput = ({
   isLoading = false,
   isCreatable = false,
   isAsync = false,
-
   placeholder = "Select...",
   noOptionsMessage = "No options found",
   closeMenuOnSelect,
-
   menuPortalTarget = typeof document !== "undefined" ? document.body : null,
-
   className,
   selectProps,
+  onChange,
 }: SelectInputProps) => {
   const formMethods = useFormContext();
   const error = get(formMethods.formState.errors, name);
@@ -387,13 +385,18 @@ export const SelectInput = ({
                   : (options.find((o) => o.value === field.value) ?? null)
               }
               onChange={(selected: any) => {
+                let value;
+
                 if (isMulti) {
-                  field.onChange(
-                    selected?.map((item: SelectOption) => item.value) ?? [],
-                  );
+                  value =
+                    selected?.map((item: SelectOption) => item.value) ?? [];
+                  field.onChange(value);
                 } else {
-                  field.onChange(selected?.value ?? null);
+                  value = selected?.value ?? null;
+                  field.onChange(value);
                 }
+
+                onChange?.(value, selected);
               }}
               {...selectProps}
             />

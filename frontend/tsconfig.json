@@ -23,7 +23,8 @@
       "@hoc/*": ["src/hoc/*"],
       "@queries/*": ["src/queries/*"],
       "@router/*": ["src/router/*"],
-      "@layout/*": ["src/layout/*"]
+      "@layout/*": ["src/layout/*"],
+      "@type/*": ["src/types/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

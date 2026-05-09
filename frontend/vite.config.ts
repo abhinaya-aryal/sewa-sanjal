@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
         "@queries": path.resolve(__dirname, "src/queries"),
         "@router": path.resolve(__dirname, "src/router"),
         "@layout": path.resolve(__dirname, "src/layout"),
+        "@types": path.resolve(__dirname, "src/types"),
       },
     },
     server: {
