@@ -1,67 +1,55 @@
 name: sewa-sanjal
+
 services:
   backend:
-    container_name: sewa-sanjal-backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: sewa-sanjal-backend:dev
-    env_file:
-      - ./backend/.env
-    ports: ["4000:4000"]
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./backend/public:/app/public
-    networks:
-      - mariadb-net
-    develop:
-      watch:
-        - action: sync
-          path: ./backend
-          target: /app
-          ignore:
-            - node_modules/
-            - dist/
-            - bun.lock
-            - public/
-        - action: rebuild
-          path: ./backend/package.json
-        - action: rebuild
-          path: ./backend/Dockerfile
-        - action: rebuild
-          path: ./backend/.env
+    container_name: sewa-sanjal-dev
 
-  frontend:
-    container_name: sewa-sanjal-frontend
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: sewa-sanjal-frontend:dev
+      context: .
+      dockerfile: ./Dockerfile
+
+    image: sewa-sanjal:dev
+
     env_file:
-      - ./frontend/.env
-    ports: ["3000:3000"]
+      - .env
+
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+
     environment:
-      - NODE_ENV=development
+      NODE_ENV: development
+
+    volumes:
+      - ./backend/public:/app/backend/public
+
     networks:
       - mariadb-net
+
     develop:
       watch:
         - action: sync
-          path: ./frontend
+          path: ./
           target: /app
           ignore:
             - node_modules/
             - dist/
-            - bun.lock
+            - backend/public/
+
         - action: rebuild
-          path: ./frontend/package.json
+          path: ./package.json
+
         - action: rebuild
-          path: ./frontend/Dockerfile
+          path: ./bun.lock
+
         - action: rebuild
-          path: ./frontend/.env
-    depends_on:
-      - backend
+          path: ./Dockerfile
+
+        - action: rebuild
+          path: ./.env
+
+        - action: rebuild
+          path: ./docker-compose.yml
 
 networks:
   mariadb-net:
