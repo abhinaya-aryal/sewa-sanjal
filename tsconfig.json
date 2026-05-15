@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNEXT",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "types": ["bun-types"],
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@modules/*": ["backend/modules/*"],
+      "@plugins/*": ["backend/plugins/*"],
+      "@prisma/*": ["backend/prisma/*"],
+      "@utils/*": ["backend/utils/*"],
+      "@components/*": ["frontend/components/*"],
+      "@services/*": ["frontend/services/*"],
+      "@pages/*": ["frontend/pages/*"],
+      "@hoc/*": ["frontend/hoc/*"],
+      "@queries/*": ["frontend/queries/*"],
+      "@router/*": ["frontend/router/*"],
+      "@layout/*": ["frontend/layout/*"],
+      "@helpers/*": ["frontend/helpers/*"],
+      "@shared/*": ["shared/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}

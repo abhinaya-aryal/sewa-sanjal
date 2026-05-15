@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "sewa-sanjal",
+  "author": {
+    "name": "Abhinaya Aryal"
+  },
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --parallel 'dev:*'",
+    "dev:frontend": "vite frontend",
+    "dev:backend": "bun run --watch backend/index.ts",
+    "build:frontend": "vite build frontend",
+    "start:backend": "bun run --watch backend/index.ts",
+    "preview": "cd frontend && vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/vite": "^4.2.4",
+    "@tanstack/react-query": "^5.100.7",
+    "@tanstack/react-query-devtools": "^5.100.7",
+    "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-hook-form": "^7.74.0",
+    "react-router-dom": "^7.14.2",
+    "react-select": "^5.10.2",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.4",
+    "zod": "^4.4.1",
+    "zustand": "^5.0.12",
+    "@elysia/static": "^1.4.10",
+    "@elysiajs/cors": "^1.4.2",
+    "@elysiajs/jwt": "^1.4.2",
+    "@elysiajs/openapi": "^1.4.15",
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
+    "elysia": "latest",
+    "prismabox": "^1.1.26"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.100.7",
+    "@types/lodash.debounce": "^4.0.9",
+    "@types/node": "^22.19.17",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "vite": "^6.4.2",
+    "@types/bcrypt": "^6.0.0",
+    "bun-types": "latest",
+    "prisma": "^7.8.0",
+    "typescript": "^6.0.3"
+  }
+}

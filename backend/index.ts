@@ -1,0 +1,33 @@
+import { Elysia } from "elysia";
+import { auth } from "./modules/auth";
+import { user } from "./modules/user";
+import { services } from "./modules/services";
+import { providers } from "./modules/providers";
+import { categories } from "./modules/categories";
+import { availabilities } from "./modules/availabilities";
+import { openApi } from "./plugins/openApi";
+import cors from "@elysiajs/cors";
+import staticPlugin from "@elysia/static";
+import { error } from "@plugins/error";
+import { normalize } from "@plugins/normalize";
+import { address } from "@modules/address";
+import { join } from "path";
+
+const app = new Elysia({ allowUnsafeValidationDetails: true })
+  .use(cors())
+  .use(openApi)
+  .use(error)
+  .use(normalize)
+  .use(auth)
+  .use(user)
+  .use(services)
+  .use(providers)
+  .use(categories)
+  .use(availabilities)
+  .use(address)
+  .use(staticPlugin({ assets: join(process.cwd(), "backend", "public") }))
+  .listen(4000);
+
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
