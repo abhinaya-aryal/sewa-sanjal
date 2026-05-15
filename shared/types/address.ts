@@ -18,3 +18,12 @@ export type Local = Pick<Province, "id" | "name" | "website"> & {
   wards: string;
   area_sq_km: string;
 };
+
+export type Address = {
+  province?: string;
+  local?: string;
+  district?: string;
+  address?: string;
+  latitude?: string;
+  longitude?: string;
+};

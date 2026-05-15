@@ -4,6 +4,7 @@ import { Provider } from "../types";
 import { Link } from "react-router-dom";
 import Render from "./Render";
 import { createFileUrl } from "@helpers/createFileUrl";
+import { parseAddress } from "@helpers/parser";
 
 interface ProviderCardProps {
   provider: Provider;
@@ -43,7 +44,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
               <Render when={Boolean(provider.location)}>
                 <div className="flex items-center mt-1 text-xs text-gray-500">
                   <MapPin size={12} className="mr-1" />
-                  {provider.location}
+                  {parseAddress(provider.location)}
                 </div>
               </Render>
             </div>
